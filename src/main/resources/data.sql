@@ -1,5 +1,114 @@
-INSERT INTO House (id, version, address) VALUES (1, 0, 'ул.Цюрупы, 16');
 
-INSERT INTO Person (version, first_name, age, house_id) VALUES (0, 'Пётр', 20, 1);
+/* --------- documents ----------- */
 
-INSERT INTO Person (version, first_name, age, house_id) VALUES (0, 'John', 25, 1);
+INSERT INTO documents (code, doc_name) 
+VALUES (03, 'Свидетельство о рождении');
+
+INSERT INTO documents (code, doc_name) 
+VALUES (07, 'Военный билет');
+
+INSERT INTO documents (code, doc_name) 
+VALUES (08, 'Временное удостоверение, выданное взамен военного билета');
+
+INSERT INTO documents (code, doc_name) 
+VALUES (10, 'Паспорт иностранного гражданина');
+
+INSERT INTO documents (code, doc_name) 
+VALUES (11, 'Свидетельство о рассмотрении ходатайства о признании лица беженцем на территории Российской Федерации по существу');
+
+INSERT INTO documents (code, doc_name) 
+VALUES (12, 'Вид на жительство в Российской Федерации');
+
+INSERT INTO documents (code, doc_name) 
+VALUES (13, 'Удостоверение беженца');
+
+INSERT INTO documents (code, doc_name) 
+VALUES (21, 'Паспорт гражданина Российской Федерации');
+
+/* --------- countries ----------- */
+
+INSERT INTO countries (code, country_name) 
+VALUES (643, 'Российская Федерация');
+
+INSERT INTO countries (code, country_name) 
+VALUES (624, 'Республика Гвинея-Бисау');
+
+INSERT INTO countries (code, country_name) 
+VALUES (612, 'ПИТКЕРН');
+
+INSERT INTO countries (code, country_name) 
+VALUES (585, 'Республика Палау');
+
+/* --------- organisations ----------- */
+
+INSERT INTO organisations (name, full_name, inn, kpp, address, phone, is_active)
+VALUES ('SomeOrg', 'Some Unknown Organisation', 123654789874, 321654987, 'Vologda, 1-ya Lenina st, 59B', 89057889878, true);
+
+INSERT INTO organisations (name, full_name, inn, kpp, address, phone, is_active)
+VALUES ('MockOrg', 'Mocking Organisation', 542634789874, 322544987, 'Samara, Mashinostroenia st, 25A', 89107999878, true);
+
+/* --------- offices ----------- */
+
+INSERT INTO offices (org_id, name, address, phone, is_active)
+VALUES (1, 'Central SO office', 'some address 01', 89107785878, true);
+
+INSERT INTO offices (org_id, name, address, phone, is_active)
+VALUES (1, 'Peripheral SO office', 'some address 02', 89456325878, true);
+
+INSERT INTO offices (org_id, name, address, phone, is_active)
+VALUES (2, 'Central MO office', 'some address 03', 89456987878, true);
+
+INSERT INTO offices (org_id, name, address, phone, is_active)
+VALUES (2, 'Peripheral MO office', 'some address 04', 897896545878, true);
+
+/* --------- users ----------- */
+
+INSERT INTO users (office_id, first_name, last_name, middle_name, position, phone, doc_code, doc_number, doc_date, citizenship_code, is_identified)
+VALUES (1, 'Petr', 'Koshkin', 'Petrovich', 'director', 89105621245, 21, 4556654789, '2008-02-13', 643, true);
+
+INSERT INTO users (office_id, first_name, last_name, middle_name, position, phone, doc_code, doc_number, doc_date, citizenship_code, is_identified)
+VALUES (1, 'Mbanga', 'Gwele', 'Gwelewich', 'worker', 89105645445, 12, 45545454789, '2005-10-14', 624, true);
+
+INSERT INTO users (office_id, first_name, last_name, middle_name, position, phone, doc_code, doc_number, doc_date, citizenship_code, is_identified)
+VALUES (2, 'Vitaliy', 'Bogatov', 'Semenovich', 'director', 89105547845, 21, 4556654546, '2010-05-10', 643, true);
+
+INSERT INTO users (office_id, first_name, last_name, middle_name, position, phone, doc_code, doc_number, doc_date, citizenship_code, is_identified)
+VALUES (2, 'Ivan', 'Bednov', 'Ivanovich', 'engineer', 89145821245, 21, 4456657989, '2000-01-01', 643, true);
+
+INSERT INTO users (office_id, first_name, last_name, middle_name, position, phone, doc_code, doc_number, doc_date, citizenship_code, is_identified)
+VALUES (3, 'Cabron', 'Cabronov', 'Cabronovich', 'manager', 89112321245, 10, 4789657989, '2000-10-10', 585, true);
+
+INSERT INTO users (office_id, first_name, last_name, middle_name, position, phone, doc_code, doc_number, doc_date, citizenship_code, is_identified)
+VALUES (3, 'Denis', 'Davidov', 'Davidovich', 'creative designer', 88796521245, 07, 2136757989, '1980-10-10', 643, false);
+
+INSERT INTO users (office_id, first_name, last_name, middle_name, position, phone, doc_code, doc_number, doc_date, citizenship_code, is_identified)
+VALUES (4, 'Pahrom', 'Baranov', 'Baranovich', 'HR', 87865521245, 10, 2549857989, '1983-12-09', 612, true);
+
+INSERT INTO users (office_id, first_name, last_name, middle_name, position, phone, doc_code, doc_number, doc_date, citizenship_code, is_identified)
+VALUES (4, 'Abdula', 'Sharipov', 'Muhammedovich', 'driver', 87865789245, 13, 2872357989, '1980-10-07', 585, false);
+
+/* --------- logins ----------- */
+
+INSERT INTO logins (name, login, password) 
+VALUES ('Petr', 'petr2008', 'qwerty');
+
+INSERT INTO logins (name, login, password) 
+VALUES ('Mbanga', 'bingobongo', 'djavaharlalneru');
+
+INSERT INTO logins (name, login, password) 
+VALUES ('Vitya', 'superVitya', 'pass');
+
+INSERT INTO logins (name, login, password) 
+VALUES ('Vanya', 'asdff', 'vanyapass');
+
+INSERT INTO logins (name, login, password) 
+VALUES ('Caby', 'capoeira', 'vivevenesuela');
+
+INSERT INTO logins (name, login, password) 
+VALUES ('Dinya', 'mimohojii', 'jenesaispas');
+
+INSERT INTO logins (name, login, password) 
+VALUES ('Paha', 'baran', 'baran1983');
+
+INSERT INTO logins (name, login, password) 
+VALUES ('Dulia', 'mahmud', 'super80');
