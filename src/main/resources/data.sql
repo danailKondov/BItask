@@ -87,28 +87,28 @@ VALUES (4, 'Pahrom', 'Baranov', 'Baranovich', 'HR', 87865521245, 10, 2549857989,
 INSERT INTO users (office_id, first_name, last_name, middle_name, position, phone, doc_code, doc_number, doc_date, citizenship_code, is_identified)
 VALUES (4, 'Abdula', 'Sharipov', 'Muhammedovich', 'driver', 87865789245, 13, 2872357989, '1980-10-07', 585, false);
 
-/* --------- logins ----------- */
+/* --------- accounts ----------- */
 
-INSERT INTO logins (name, login, password) 
-VALUES ('Petr', 'petr2008', 'qwerty');
+INSERT INTO accounts (name, login, password_SHA2_hash, is_activated, activation_code)
+VALUES ('Petr', 'petr2008', 'qwerty', TRUE, 'fghyetr54dfr');
 
-INSERT INTO logins (name, login, password) 
-VALUES ('Mbanga', 'bingobongo', 'djavaharlalneru');
+INSERT INTO accounts (name, login, password_SHA2_hash, is_activated, activation_code)
+VALUES ('Mbanga', 'bingobongo', 'djavaharlalneru', FALSE, 'fghyetr54dfgdfg');
 
-INSERT INTO logins (name, login, password) 
-VALUES ('Vitya', 'superVitya', 'pass');
+INSERT INTO accounts (name, login, password_SHA2_hash, is_activated, activation_code)
+VALUES ('Vitya', 'superVitya', 'pass', TRUE, 'fghye545423dfr');
 
-INSERT INTO logins (name, login, password) 
-VALUES ('Vanya', 'asdff', 'vanyapass');
+INSERT INTO accounts (name, login, password_SHA2_hash, is_activated, activation_code)
+VALUES ('Vanya', 'asdff', 'vanyapass', TRUE, 'fghye5454dfdffr');
 
-INSERT INTO logins (name, login, password) 
-VALUES ('Caby', 'capoeira', 'vivevenesuela');
+INSERT INTO accounts (name, login, password_SHA2_hash, is_activated, activation_code)
+VALUES ('Caby', 'capoeira', 'vivevenesuela', FALSE, 'fghye45jgjghffr');
 
-INSERT INTO logins (name, login, password) 
-VALUES ('Dinya', 'mimohojii', 'jenesaispas');
+INSERT INTO accounts (name, login, password_SHA2_hash, is_activated, activation_code)
+VALUES ('Dinya', 'mimohojii', 'jenesaispas', FALSE, 'fghyet4545dfdfr');
 
-INSERT INTO logins (name, login, password) 
-VALUES ('Paha', 'baran', 'baran1983');
+INSERT INTO accounts (name, login, password_SHA2_hash, is_activated, activation_code)
+VALUES ('Paha', 'baran', 'baran1983', TRUE, 'fghy45454dfr');
 
-INSERT INTO logins (name, login, password) 
-VALUES ('Dulia', 'mahmud', 'super80');
+INSERT INTO accounts (name, login, password_SHA2_hash, is_activated, activation_code)
+VALUES ('Dulia', 'mahmud', 'super80', TRUE, 'fghgfgfgf54dfr');

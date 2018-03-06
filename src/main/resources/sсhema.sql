@@ -62,9 +62,11 @@ CREATE TABLE IF NOT EXISTS users (
 	ON UPDATE CASCADE	
 );
 
-CREATE TABLE IF NOT EXISTS logins (
-	id integer primary key auto_increment,
-	name varchar(50),
-	login varchar(50) not null,
-	password varchar(50) not null
+CREATE TABLE IF NOT EXISTS accounts (
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(50),
+	login VARCHAR(50) NOT NUll,
+	password_SHA2_hash VARCHAR(50) NOT NULL,
+	is_activated BOOLEAN NOT NULL,
+	activation_code VARCHAR(255)
 );

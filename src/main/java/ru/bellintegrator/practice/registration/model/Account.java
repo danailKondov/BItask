@@ -7,8 +7,8 @@ import java.io.Serializable;
  * Логин, пароль и имя пользователя.
  */
 @Entity
-@Table(name = "logins")
-public class Login implements Serializable{
+@Table(name = "accounts")
+public class Account implements Serializable{
 
     @Id
     @GeneratedValue
@@ -25,16 +25,25 @@ public class Login implements Serializable{
     private String login;
 
     @Basic(optional = false)
-    @Column(length = 50)
+    @Column(name = "password_SHA2_hash", length = 50)
     private String password;
 
-    public Login() {
+    @Basic(optional = false)
+    @Column(name = "is_activated")
+    private boolean isActivated;
+
+    @Basic(optional = false)
+    @Column(name = "activation_code")
+    private String activationCode;
+
+    public Account() {
     }
 
-    public Login(String name, String login, String password) {
+    public Account(String name, String login, String password) {
         this.name = name;
         this.login = login;
         this.password = password;
+        isActivated = false;
     }
 
     public int getId() {
@@ -63,5 +72,21 @@ public class Login implements Serializable{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated(boolean activated) {
+        isActivated = activated;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 }
