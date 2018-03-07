@@ -36,9 +36,14 @@ public interface AccountDAO {
      */
     Account getAccountByCode(String hashFromActivationCode);
 
-//    /**
-//     * Обновить аккаунт.
-//     * @param account акк
-//     */
-//    void update(Account account);
+    /**
+     * Обновить аккаунт.
+     * @param account акк
+     */
+    void update(Account account);
+
+    /**
+     * Удалить все аккаунты.
+     */
+    void deleteAllAccounts();
 }

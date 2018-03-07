@@ -89,4 +89,26 @@ public class Account implements Serializable{
     public void setActivationCode(String activationCode) {
         this.activationCode = activationCode;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Account account = (Account) o;
+
+        if (isActivated() != account.isActivated()) return false;
+        if (getName() != null ? !getName().equals(account.getName()) : account.getName() != null) return false;
+        if (getLogin() != null ? !getLogin().equals(account.getLogin()) : account.getLogin() != null) return false;
+        return getPassword() != null ? getPassword().equals(account.getPassword()) : account.getPassword() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getName() != null ? getName().hashCode() : 0;
+        result = 31 * result + (getLogin() != null ? getLogin().hashCode() : 0);
+        result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
+        result = 31 * result + (isActivated() ? 1 : 0);
+        return result;
+    }
 }

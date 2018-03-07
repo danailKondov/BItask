@@ -12,6 +12,4 @@ public interface AccountService {
     boolean verifyLogin (String login, String password);
 
     boolean activateAccountByCode(String code);
-
-//    String getSHA256HashFromString(String password);
 }

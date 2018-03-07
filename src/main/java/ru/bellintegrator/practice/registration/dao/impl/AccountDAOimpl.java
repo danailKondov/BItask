@@ -6,7 +6,9 @@ import ru.bellintegrator.practice.registration.dao.AccountDAO;
 import ru.bellintegrator.practice.registration.model.Account;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,24 +33,43 @@ public class AccountDAOimpl implements AccountDAO {
 
     @Override
     public Account getAccountByLogin(String login) {
-        TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a WHERE a.login = :login", Account.class); // почему не распознает Account?
-        return query.getSingleResult();
+        try {
+            TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a WHERE a.login = :login", Account.class)
+                    .setParameter("login", login);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
     public List<Account> getAllAccounts() {
-        TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a", Account.class); // почему не распознает Account?
-        return query.getResultList();
+        try {
+            TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a", Account.class);
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return Collections.emptyList();
+        }
     }
 
     @Override
-    public Account getAccountByCode(String hashFromActivationCode) {
-        TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a WHERE a.activationCode = :hashFromActivationCode", Account.class);
-        return query.getSingleResult();
+    public Account getAccountByCode(String code) {
+        try {
+            TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a WHERE a.activationCode = :code", Account.class)
+                    .setParameter("code", code);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
-//    @Override
-//    public void update(Account account) {
-//        em.merge(account); // update?
-//    }
+    @Override
+    public void update(Account account) {
+        em.merge(account);
+    }
+
+    @Override
+    public void deleteAllAccounts() {
+        em.createQuery("DELETE FROM Account").executeUpdate();
+    }
 }
