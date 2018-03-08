@@ -208,10 +208,9 @@ method:GET
   “isActive”:”true”
 }`
 
+    Out:
 
-Out:
-
-    `{
+   `{
     “result”:”success”
 }`
 
@@ -244,6 +243,7 @@ Out:
     method:GET
 
     Out:
+    
     `{
   “id”:””,
   “firstName”:””,

@@ -31,8 +31,6 @@ public class AccountControllerImpl implements AccountController{
         return getSuccessMessageWrapper();
     }
 
-    // TODO: переделать обработку ошибок + исключения & @ExceptionHandler
-
     @GetMapping(value = "/activation")
     public void accountActivation(@RequestParam("code") String code) {
         accountService.activateAccountByCode(code);

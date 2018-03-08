@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.bellintegrator.practice.registration.exceptions.AccountException;
 import ru.bellintegrator.practice.registration.dao.AccountDAO;
 import ru.bellintegrator.practice.registration.model.Account;
 import ru.bellintegrator.practice.registration.service.AccountService;
@@ -31,7 +32,7 @@ import java.util.Random;
  * Created on 05.03.2018.
  */
 @Service
-@Scope(proxyMode = ScopedProxyMode.INTERFACES)
+@Scope(proxyMode = ScopedProxyMode.INTERFACES) //?
 public class AccountServiceImpl implements AccountService {
 
     private final Logger log = LoggerFactory.getLogger(AccountServiceImpl.class);
@@ -49,7 +50,6 @@ public class AccountServiceImpl implements AccountService {
         this.accountDAO = accountDAO;
     }
 
-
     @Override
     @Transactional
     public boolean add(Account account) {
@@ -59,12 +59,12 @@ public class AccountServiceImpl implements AccountService {
                 setActivationCode(account);
                 return accountDAO.save(account);
             } else {
-                log.debug("login is not free: " + account.getLogin());
-                return false;
+                log.debug("Подобный логин уже существует: " + account.getLogin());
+                throw new AccountException("Подобный логин уже существует: " + account.getLogin());
             }
         } catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
             log.error(e.getMessage(), e);
-            return false;
+            throw new AccountException("Ошибка создания аккаунта: ошибка кодирования пароля", e);
         }
     }
 
@@ -110,15 +110,13 @@ public class AccountServiceImpl implements AccountService {
                 String hashFromPass = getSHA256HashFromString(password);
                 Account account = accountDAO.getAccountByLogin(login);
                 if (account == null) {
-                    log.debug("Нет аккаунта с подобным логином в базе данных: " + login);
-                    return false;
+                    throw new AccountException("Нет аккаунта с подобным логином в базе данных: " + login);
                 } else {
                     return hashFromPass.equals(account.getPassword());
                 }
             }
         } catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
-            log.error(e.getMessage(), e);
-            return false;
+            throw new AccountException("Ошибка верификации логина: ошибка кодирования пароля", e);
         }
     }
 
@@ -143,12 +141,10 @@ public class AccountServiceImpl implements AccountService {
                 accountDAO.update(account);
                 return true;
             } else {
-                log.debug("Нет аккаунта с данным кодом активации: " + code);
-                return false;
+                throw new AccountException("Нет аккаунта с данным кодом активации: " + code);
             }
         } catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
-            log.error(e.getMessage(), e);
-            return false;
+            throw new AccountException("Ошибка активации аккаунта: ошибка кодирования кода активации", e);
         }
     }
 
