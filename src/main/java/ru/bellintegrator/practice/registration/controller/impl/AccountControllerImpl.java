@@ -12,6 +12,8 @@ import java.util.Map;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
+ * Контроллер для работы с аккаунтами: регистрации новых аккаунтов, их активации и проверки логинов-паролей.
+ *
  * Created on 05.03.2018.
  */
 @RestController

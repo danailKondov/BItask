@@ -12,4 +12,6 @@ public interface AccountService {
     boolean verifyLogin (String login, String password);
 
     boolean activateAccountByCode(String code);
+
+    String getCodeForActivation(); // для нужд тестирования - здесь долен быть метод отправки мейла
 }

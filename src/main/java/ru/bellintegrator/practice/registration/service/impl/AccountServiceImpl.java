@@ -59,11 +59,9 @@ public class AccountServiceImpl implements AccountService {
                 setActivationCode(account);
                 return accountDAO.save(account);
             } else {
-                log.debug("Подобный логин уже существует: " + account.getLogin());
                 throw new AccountException("Подобный логин уже существует: " + account.getLogin());
             }
         } catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
-            log.error(e.getMessage(), e);
             throw new AccountException("Ошибка создания аккаунта: ошибка кодирования пароля", e);
         }
     }
@@ -105,7 +103,7 @@ public class AccountServiceImpl implements AccountService {
     public boolean verifyLogin(String login, String password) {
         try {
             if (login == null || password == null) { // нужна ли подобная проверка?
-                return false;
+                throw new AccountException("Отсутствует логин или пароль");
             } else {
                 String hashFromPass = getSHA256HashFromString(password);
                 Account account = accountDAO.getAccountByLogin(login);
@@ -153,6 +151,7 @@ public class AccountServiceImpl implements AccountService {
      * отсутствующего в учебном проекте, но необходимого для тестирования.
      * @return код активации
      */
+    @Override
     public String getCodeForActivation() {
         return codeForActivation;
     }
