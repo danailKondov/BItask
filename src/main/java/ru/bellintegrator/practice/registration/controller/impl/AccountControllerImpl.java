@@ -1,11 +1,14 @@
 package ru.bellintegrator.practice.registration.controller.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.practice.registration.controller.AccountController;
 import ru.bellintegrator.practice.registration.model.Account;
 import ru.bellintegrator.practice.registration.service.AccountService;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,23 +30,26 @@ public class AccountControllerImpl implements AccountController{
         this.accountService = accountService;
     }
 
+    @Override
     @PostMapping(value = "/register")
-    public Map register(@RequestBody Account account) {
+    public ResponseEntity<Map> register(@RequestBody @Valid Account account) {
         accountService.add(account);
-        return getSuccessMessageWrapper();
+        return new ResponseEntity<>(getSuccessMessageWrapper(), HttpStatus.OK);
     }
 
+    @Override
     @GetMapping(value = "/activation")
     public void accountActivation(@RequestParam("code") String code) {
         accountService.activateAccountByCode(code);
     }
 
+    @Override
     @PostMapping(value = "/login")
-    public Map login(@RequestBody Map<String, String> map) {
+    public ResponseEntity<Map> login(@RequestBody Map<String, String> map) {
         if(accountService.verifyLogin(map.get("login"), map.get("password"))) {
-            return getSuccessMessageWrapper();
+            return new ResponseEntity<>(getSuccessMessageWrapper(), HttpStatus.OK);
         } else {
-            return getErrorMessageWrapper();
+            return new ResponseEntity<>(getErrorMessageWrapper(), HttpStatus.BAD_REQUEST);
         }
     }
 

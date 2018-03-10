@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.http.ResponseEntity;
 import ru.bellintegrator.practice.registration.model.Account;
 import ru.bellintegrator.practice.registration.service.AccountService;
 
@@ -32,10 +33,11 @@ public class AccountControllerImplTest {
     public void registerTest() {
         Account account = new Account("name", "log", "pass");
 
-        Map result = accountController.register(account);
+        ResponseEntity<Map> result = accountController.register(account);
 
         verify(accountService).add(account);
-        Map message = (Map) result.get("data");
+
+        Map message = (Map) result.getBody().get("data");
         String resultMessage = (String) message.get("result");
         assertTrue(resultMessage.equals("success"));
     }
@@ -54,9 +56,9 @@ public class AccountControllerImplTest {
         requestBody.put("password", "pass");
         when(accountService.verifyLogin("log", "pass")).thenReturn(true);
 
-        Map result = accountController.login(requestBody);
+        ResponseEntity<Map> result = accountController.login(requestBody);
 
-        Map message = (Map) result.get("data");
+        Map message = (Map) result.getBody().get("data");
         String resultMessage = (String) message.get("result");
         assertTrue(resultMessage.equals("success"));
     }
@@ -68,8 +70,8 @@ public class AccountControllerImplTest {
         requestBody.put("password", "pass");
         when(accountService.verifyLogin("log", "pass")).thenReturn(false);
 
-        Map result = accountController.login(requestBody);
-        String resultMessage = (String) result.get("error");
+        ResponseEntity<Map> result = accountController.login(requestBody);
+        String resultMessage = (String) result.getBody().get("error");
         assertTrue(resultMessage.equals("Password is wrong!"));
     }
 

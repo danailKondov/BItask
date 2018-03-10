@@ -1,22 +1,19 @@
 package ru.bellintegrator.practice.registration.controller.impl;
 
 import org.json.JSONException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.bellintegrator.practice.Application;
 import ru.bellintegrator.practice.registration.dao.AccountDAO;
 import ru.bellintegrator.practice.registration.model.Account;
 import ru.bellintegrator.practice.registration.service.AccountService;
-import ru.bellintegrator.practice.registration.service.impl.AccountServiceImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,8 +51,13 @@ public class AccountControllerImplIntegrationTest {
 
     // заголовок запроса, в т.ч. определяет тип передаваемых/принимаемых значений (Accept),
     // например: headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-    private HttpHeaders headers = new HttpHeaders();
+    private HttpHeaders headers;
 
+    @Before
+    public void init() {
+        headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+    }
 
     /**
      * Тест успешной регистрации аккаунта.
@@ -90,6 +92,38 @@ public class AccountControllerImplIntegrationTest {
                 HttpMethod.POST, entity, String.class);
 
         String expected = "{\"error\":\"Подобный логин уже существует: same log\"}";
+        JSONAssert.assertEquals(expected, response.getBody(), false);
+    }
+
+    /**
+     * Тест регистрации аккаунта, когда логин не проходит валидацию (слишком короткий - должен быть минимум 3 символа).
+     */
+    @Test
+    public void registerWhenLoginIsTooShortTest() throws JSONException {
+        Account accountToAdd = new Account("new name", "sa", "new pass");
+        HttpEntity<Account> entity = new HttpEntity<>(accountToAdd, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/api/register",
+                HttpMethod.POST, entity, String.class);
+
+        String expected = "{\"error\":\"Ошибка валидации при регистрации аккаунта: size must be between 3 and 50  \"}";
+        JSONAssert.assertEquals(expected, response.getBody(), false);
+    }
+
+    /**
+     * Тест регистрации аккаунта, когда пароль не проходит валидацию (слишком короткий - должен быть минимум 3 символа).
+     */
+    @Test
+    public void registerWhenPasswordIsTooShortTest() throws JSONException {
+        Account accountToAdd = new Account("new name", "sasdkjfhksdjhfk", "ne");
+        HttpEntity<Account> entity = new HttpEntity<>(accountToAdd, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/api/register",
+                HttpMethod.POST, entity, String.class);
+
+        String expected = "{\"error\":\"Ошибка валидации при регистрации аккаунта: size must be between 3 and 50  \"}";
         JSONAssert.assertEquals(expected, response.getBody(), false);
     }
 

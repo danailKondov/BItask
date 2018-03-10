@@ -1,5 +1,6 @@
 package ru.bellintegrator.practice.registration.controller;
 
+import org.springframework.http.ResponseEntity;
 import ru.bellintegrator.practice.registration.model.Account;
 
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
  */
 public interface AccountController {
 
-    Map register(Account account);
+    ResponseEntity<Map> register(Account account);
     void accountActivation(String code);
+    ResponseEntity<Map> login(Map<String, String> map);
 }

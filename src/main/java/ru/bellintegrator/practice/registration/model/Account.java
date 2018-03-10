@@ -1,6 +1,7 @@
 package ru.bellintegrator.practice.registration.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -18,14 +19,17 @@ public class Account implements Serializable{
     private Integer version;
 
     @Column(length = 50)
+    @Size(min=3, max = 50)
     private String name;
 
     @Basic(optional = false)
     @Column(length = 50)
+    @Size(min=3, max = 50)
     private String login;
 
     @Basic(optional = false)
     @Column(name = "password_SHA2_hash", length = 50)
+    @Size(min=3, max = 50)
     private String password;
 
     @Basic(optional = false)
