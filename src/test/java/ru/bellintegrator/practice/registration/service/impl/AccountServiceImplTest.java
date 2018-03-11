@@ -7,12 +7,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import ru.bellintegrator.practice.registration.dao.AccountDAO;
-import ru.bellintegrator.practice.registration.exceptions.AccountException;
+import ru.bellintegrator.practice.exceptionhandler.exceptions.AccountException;
 import ru.bellintegrator.practice.registration.model.Account;
-import ru.bellintegrator.practice.registration.service.AccountService;
-
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
 
 import static org.junit.Assert.*;
 

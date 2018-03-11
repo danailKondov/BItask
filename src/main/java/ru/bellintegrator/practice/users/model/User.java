@@ -1,12 +1,11 @@
 package ru.bellintegrator.practice.users.model;
 
 import ru.bellintegrator.practice.office.model.Office;
-import ru.bellintegrator.practice.utils.model.Country;
-import ru.bellintegrator.practice.utils.model.Document;
+import ru.bellintegrator.practice.referencebook.model.Country;
+import ru.bellintegrator.practice.referencebook.model.Document;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 
 /**

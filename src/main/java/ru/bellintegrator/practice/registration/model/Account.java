@@ -13,7 +13,7 @@ public class Account implements Serializable{
 
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
 
     @Version
     private Integer version;
@@ -50,7 +50,7 @@ public class Account implements Serializable{
         isActivated = false;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

@@ -143,7 +143,7 @@ method:GET
     “result”:”success”
 }`
 
-7. ***api/office/list/{orgId:.+}***
+7. ***api/office/list***
 
     In (фильтр):
 

@@ -107,7 +107,7 @@ public class AccountControllerImplIntegrationTest {
                 "/api/register",
                 HttpMethod.POST, entity, String.class);
 
-        String expected = "{\"error\":\"Ошибка валидации при регистрации аккаунта: size must be between 3 and 50  \"}";
+        String expected = "{\"error\":\"Ошибка валидации: size must be between 3 and 50  \"}";
         JSONAssert.assertEquals(expected, response.getBody(), false);
     }
 
@@ -123,7 +123,7 @@ public class AccountControllerImplIntegrationTest {
                 "/api/register",
                 HttpMethod.POST, entity, String.class);
 
-        String expected = "{\"error\":\"Ошибка валидации при регистрации аккаунта: size must be between 3 and 50  \"}";
+        String expected = "{\"error\":\"Ошибка валидации: size must be between 3 and 50  \"}";
         JSONAssert.assertEquals(expected, response.getBody(), false);
     }
 

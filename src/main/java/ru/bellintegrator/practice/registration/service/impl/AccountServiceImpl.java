@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bellintegrator.practice.registration.exceptions.AccountException;
+import ru.bellintegrator.practice.exceptionhandler.exceptions.AccountException;
 import ru.bellintegrator.practice.registration.dao.AccountDAO;
 import ru.bellintegrator.practice.registration.model.Account;
 import ru.bellintegrator.practice.registration.service.AccountService;

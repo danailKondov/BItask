@@ -25,7 +25,8 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @EnableSwagger2
 @ImportResource("spring_mvc_config.xml")
 @SpringBootApplication
-@ComponentScan(basePackageClasses = {AccountControllerImpl.class, AccountServiceImpl.class, AccountDAOimpl.class})
+//@ComponentScan(basePackageClasses = {AccountControllerImpl.class, AccountServiceImpl.class, AccountDAOimpl.class})
+@ComponentScan("ru.bellintegrator.practice")
 public class Application {
 
     public static void main(String[] args) {

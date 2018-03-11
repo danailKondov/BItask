@@ -1,4 +1,4 @@
-package ru.bellintegrator.practice.utils.model;
+package ru.bellintegrator.practice.referencebook.model;
 
 import javax.persistence.*;
 import java.io.Serializable;

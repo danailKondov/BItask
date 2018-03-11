@@ -1,6 +1,9 @@
 package ru.bellintegrator.practice.orgs.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -12,29 +15,34 @@ public class Organisation implements Serializable {
 
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
 
     @Version
     private Integer version;
 
-    @Basic(optional = false)
+    @NotNull // для валидации - обязательный параметр
+    @Size(min=3, max=100)
+    @Basic(optional = false) // вероятно, избыточны?
     @Column(length = 100)
-    private String name; // обязательный параметр
+    private String name;
 
     @Column(name = "full_name")
     private String fullName;
 
+//    @Size(min=12, max=12) - не подходит к числовым типам
     private long inn;
 
     private long kpp;
 
     private String address;
 
+    // избыточно для данного ТЗ
 //    @OneToMany(mappedBy = "organisations")
 //    private List<Office> offices = new ArrayList<>();
 
     private long phone;
 
+    @AssertTrue // для валидации
     @Column(name = "is_active")
     private boolean isActive;
 
@@ -55,9 +63,13 @@ public class Organisation implements Serializable {
         this.isActive = isActive;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
+
+//    public void setId(long id) {
+//        this.id = id;
+//    }
 
     public String getName() {
         return name;

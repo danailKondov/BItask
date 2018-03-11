@@ -1,4 +1,4 @@
-package ru.bellintegrator.practice.registration.exceptions;
+package ru.bellintegrator.practice.exceptionhandler.exceptions;
 
 /**
  * Created on 08.03.2018.

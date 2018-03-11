@@ -1,4 +1,4 @@
-package ru.bellintegrator.practice.registration.controller.impl;
+package ru.bellintegrator.practice.exceptionhandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.bellintegrator.practice.registration.exceptions.AccountException;
+import ru.bellintegrator.practice.exceptionhandler.exceptions.AccountException;
+import ru.bellintegrator.practice.exceptionhandler.exceptions.OrganisationException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,17 +22,17 @@ import java.util.Map;
  * Created on 08.03.2018.
  */
 @ControllerAdvice
-public class AccountExceptionsHandler extends ResponseEntityExceptionHandler {
+public class PracticeExceptionsHandler extends ResponseEntityExceptionHandler {
 
-    private final Logger log = LoggerFactory.getLogger(AccountExceptionsHandler.class);
+    private final Logger log = LoggerFactory.getLogger(PracticeExceptionsHandler.class);
 
     /**
-     * Обрабатывает исключение AccountException.
+     * Обрабатывает исключение AccountException, OrganisationException.
      * @param e исключение
      * @return объект-обертку (Map) с сообщением об ошибке
      */
-    @ExceptionHandler({AccountException.class})
-    protected @ResponseBody ResponseEntity<Map> handleAccountExceptions(AccountException e) {
+    @ExceptionHandler({AccountException.class, OrganisationException.class})
+    protected @ResponseBody ResponseEntity<Map> handleAllCustomExceptions(RuntimeException e) {
         log.error(e.getMessage(), e.getCause());
         Map<String, String> result = new HashMap<>();
         result.put("error", e.getMessage());
@@ -55,7 +56,7 @@ public class AccountExceptionsHandler extends ResponseEntityExceptionHandler {
             sb.append(error.getDefaultMessage());
             sb.append("  ");
         }
-        result.put("error", "Ошибка валидации при регистрации аккаунта: " + sb.toString());
+        result.put("error", "Ошибка валидации: " + sb.toString());
         return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
     }
 
