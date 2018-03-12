@@ -14,7 +14,7 @@ public class Country implements Serializable{
     private int code;
 
     @Version
-    private Integer version;
+    private Integer version = 0;
 
     @Basic(optional = false)
     @Column(name = "country_name")

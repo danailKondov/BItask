@@ -13,6 +13,7 @@ import ru.bellintegrator.practice.orgs.service.OrganisationService;
 import javax.validation.Valid;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -51,6 +52,14 @@ public class OrganisationControllerImpl implements OrganisationController {
     public ResponseEntity updateOrganisation(@RequestBody @Valid Organisation organisation) {
         service.update(organisation);
         return new ResponseEntity<>(new CustomSuccessResponse(), HttpStatus.OK);
+    }
+
+    @Override
+    @PostMapping(value = "/list")
+    public ResponseEntity getAllByCriteria(CriteriaView view) {
+        List<Organisation> list = service.getOrganisationsByCriteria(view.getName(), view.getInn(), view.isActive());
+        CustomDataOut<List<Organisation>> dataOut = new CustomDataOut<>(list);
+        return new ResponseEntity<>(dataOut, HttpStatus.FOUND);
     }
 
 }

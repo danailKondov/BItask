@@ -16,7 +16,7 @@ public class Account implements Serializable{
     private long id;
 
     @Version
-    private Integer version;
+    private Integer version = 0;
 
     @Column(length = 50)
     @Size(min=3, max = 50)

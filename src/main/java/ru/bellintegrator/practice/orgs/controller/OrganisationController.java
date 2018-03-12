@@ -1,6 +1,8 @@
 package ru.bellintegrator.practice.orgs.controller;
 
 import org.springframework.http.ResponseEntity;
+import ru.bellintegrator.practice.orgs.controller.impl.CriteriaView;
+import ru.bellintegrator.practice.orgs.controller.impl.OrganisationControllerImpl;
 import ru.bellintegrator.practice.orgs.model.Organisation;
 
 /**
@@ -11,4 +13,5 @@ public interface OrganisationController {
     ResponseEntity<?> getOrganisationById(long id);
     ResponseEntity<?> saveOrganisation(Organisation organisation);
     ResponseEntity<?> updateOrganisation(Organisation organisation);
+    public ResponseEntity getAllByCriteria(CriteriaView view);
 }

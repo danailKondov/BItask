@@ -18,7 +18,7 @@ public class Organisation implements Serializable {
     private long id;
 
     @Version
-    private Integer version;
+    private Integer version = 0; // Оптимистическая блокировка не будет работать, если поле, аннотированное с помощью @Version, установлено на null
 
     @NotNull // для валидации - обязательный параметр
     @Size(min=3, max=100)
@@ -29,16 +29,11 @@ public class Organisation implements Serializable {
     @Column(name = "full_name")
     private String fullName;
 
-//    @Size(min=12, max=12) - не подходит к числовым типам
     private long inn;
 
     private long kpp;
 
     private String address;
-
-    // избыточно для данного ТЗ
-//    @OneToMany(mappedBy = "organisations")
-//    private List<Office> offices = new ArrayList<>();
 
     private long phone;
 
@@ -66,10 +61,6 @@ public class Organisation implements Serializable {
     public long getId() {
         return id;
     }
-
-//    public void setId(long id) {
-//        this.id = id;
-//    }
 
     public String getName() {
         return name;

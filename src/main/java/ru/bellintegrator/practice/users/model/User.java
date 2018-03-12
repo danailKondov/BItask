@@ -20,7 +20,7 @@ public class User implements Serializable{
     private int id;
 
     @Version
-    private Integer version;
+    private Integer version = 0;
 
     @ManyToOne(
             fetch = FetchType.LAZY,
