@@ -1,8 +1,7 @@
 package ru.bellintegrator.practice.orgs.controller;
 
 import org.springframework.http.ResponseEntity;
-import ru.bellintegrator.practice.orgs.controller.impl.CriteriaView;
-import ru.bellintegrator.practice.orgs.controller.impl.OrganisationControllerImpl;
+import ru.bellintegrator.practice.orgs.view.CriteriaView;
 import ru.bellintegrator.practice.orgs.model.Organisation;
 
 /**

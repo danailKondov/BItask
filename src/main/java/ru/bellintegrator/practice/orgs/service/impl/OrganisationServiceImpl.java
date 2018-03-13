@@ -16,6 +16,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,25 +66,29 @@ public class OrganisationServiceImpl implements OrganisationService {
         }
     }
 
+    // пока не пашет((
     @Override
     public List<Organisation> getOrganisationsByCriteria(String name, Long inn, Boolean active) {
         Specification<Organisation> spec = new Specification<Organisation>() {
             @Override
             public Predicate toPredicate(Root<Organisation> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new ArrayList<>();
                 if (name != null) {
-                    criteriaBuilder.and(criteriaBuilder.like(root.get("name"), name)); // неточное совпадение
+                    predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%")); // неточное совпадение, обязательный параметр?
                 }
                 if (inn != null) {
-                    criteriaBuilder.and(criteriaBuilder.equal(root.get("inn"), inn));
+                    predicates.add(criteriaBuilder.equal(root.get("inn"), inn)); // что если result = null?
                 }
                 if (active != null) {
-                    criteriaBuilder.and(criteriaBuilder.equal(root.get("isActive"), active));
+                    predicates.add(criteriaBuilder.equal(root.get("isActive"), active));
                 }
-                if (name == null && inn == null && active == null) {
+                if (predicates.isEmpty()) {
                     // вернуть все организации
+                    CriteriaQuery<Organisation> query = criteriaBuilder.createQuery(Organisation.class);
+                    return query.select(root).getRestriction();
+                } else {
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
                 }
-                // TODO: завершить метод, добавить организации в data.sql и потестить, в регистрации логин должен быть email, плюс хэш в отдельный сервисный класс
-                return criteriaBuilder.conjunction();
             }
         };
         return repository.findAll(spec);

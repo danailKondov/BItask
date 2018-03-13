@@ -64,7 +64,7 @@ public class AccountControllerImplIntegrationTest {
      */
     @Test
     public void registerWhenSuccessfulTest() throws JSONException {
-        Account account = new Account("some name", "some log", "pass");
+        Account account = new Account("some name", "some@log.com", "pass");
         HttpEntity<Account> entity = new HttpEntity<>(account, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -73,7 +73,7 @@ public class AccountControllerImplIntegrationTest {
 
         String expected = "{\"data\":{\"result\":\"success\"}}";
         JSONAssert.assertEquals(expected, response.getBody(), false); // выдано подтверждающее сообщение в формате JSON
-        assertNotNull(accountDAO.getAccountByLogin("some log")); // аккаунт в базе данных
+        assertNotNull(accountDAO.getAccountByLogin("some@log.com")); // аккаунт в базе данных
     }
 
     /**
@@ -81,25 +81,25 @@ public class AccountControllerImplIntegrationTest {
      */
     @Test
     public void registerWhenLoginIsAlreadyInUseTest() throws JSONException {
-        Account accountInDB = new Account("some name", "same log", "pass");
+        Account accountInDB = new Account("some name", "same@log.com", "pass");
         accountService.add(accountInDB);
 
-        Account accountToAdd = new Account("new name", "same log", "new pass");
+        Account accountToAdd = new Account("new name", "same@log.com", "new pass");
         HttpEntity<Account> entity = new HttpEntity<>(accountToAdd, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
                 "/api/register",
                 HttpMethod.POST, entity, String.class);
 
-        String expected = "{\"error\":\"Подобный логин уже существует: same log\"}";
+        String expected = "{\"error\":\"Подобный логин уже существует: same@log.com\"}";
         JSONAssert.assertEquals(expected, response.getBody(), false);
     }
 
     /**
-     * Тест регистрации аккаунта, когда логин не проходит валидацию (слишком короткий - должен быть минимум 3 символа).
+     * Тест регистрации аккаунта, когда логин не проходит валидацию (не соответствует шаблону email).
      */
     @Test
-    public void registerWhenLoginIsTooShortTest() throws JSONException {
+    public void registerWhenLoginIsNotEmailTest() throws JSONException {
         Account accountToAdd = new Account("new name", "sa", "new pass");
         HttpEntity<Account> entity = new HttpEntity<>(accountToAdd, headers);
 
@@ -107,7 +107,7 @@ public class AccountControllerImplIntegrationTest {
                 "/api/register",
                 HttpMethod.POST, entity, String.class);
 
-        String expected = "{\"error\":\"Ошибка валидации: size must be between 3 and 50  \"}";
+        String expected = "{\"error\":\"Ошибка валидации: not a well-formed email address  \"}";
         JSONAssert.assertEquals(expected, response.getBody(), false);
     }
 
@@ -116,7 +116,7 @@ public class AccountControllerImplIntegrationTest {
      */
     @Test
     public void registerWhenPasswordIsTooShortTest() throws JSONException {
-        Account accountToAdd = new Account("new name", "sasdkjfhksdjhfk", "ne");
+        Account accountToAdd = new Account("new name", "new@mail.com", "ne");
         HttpEntity<Account> entity = new HttpEntity<>(accountToAdd, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -132,10 +132,10 @@ public class AccountControllerImplIntegrationTest {
      */
     @Test
     public void accountActivationWhenSuccessfulTest() {
-        Account account = new Account("some name", "some new log", "pass");
+        Account account = new Account("some name", "somenew@log.ru", "pass");
         accountService.add(account);
 
-        assertFalse(accountDAO.getAccountByLogin("some new log").isActivated()); // аккаунт не активирован
+        assertFalse(accountDAO.getAccountByLogin("somenew@log.ru").isActivated()); // аккаунт не активирован
 
         String code = accountService.getCodeForActivation();
         String url = "/api/activation?code=" + code;
@@ -143,7 +143,7 @@ public class AccountControllerImplIntegrationTest {
 
         restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 
-        assertTrue(accountDAO.getAccountByLogin("some new log").isActivated()); // проверяем статус активации аккаунта (активирован)
+        assertTrue(accountDAO.getAccountByLogin("somenew@log.ru").isActivated()); // проверяем статус активации аккаунта (активирован)
     }
 
     /**
@@ -165,11 +165,11 @@ public class AccountControllerImplIntegrationTest {
      */
     @Test
     public void loginWhenSuccessfulTest() throws JSONException {
-        Account account = new Account("some name", "another log", "tricky pass");
+        Account account = new Account("some name", "another@log.gov", "tricky pass");
         accountService.add(account);
 
         Map<String, String> map = new HashMap<>();
-        map.put("login", "another log");
+        map.put("login", "another@log.gov");
         map.put("password", "tricky pass");
         HttpEntity<Map> entity = new HttpEntity<>(map, headers);
 
@@ -186,11 +186,11 @@ public class AccountControllerImplIntegrationTest {
      */
     @Test
     public void loginWhenPassIsWrongTest() throws JSONException {
-        Account account = new Account("some name", "some log2", "tricky pass");
+        Account account = new Account("some name", "some@log2.ru", "tricky pass");
         accountService.add(account);
 
         Map<String, String> map = new HashMap<>();
-        map.put("login", "some log2");
+        map.put("login", "some@log2.ru");
         map.put("password", "wrong pass");
         HttpEntity<Map> entity = new HttpEntity<>(map, headers);
 
@@ -208,7 +208,7 @@ public class AccountControllerImplIntegrationTest {
     @Test
     public void loginWhenThereIsNoPasswordTest() throws JSONException {
         Map<String, String> map = new HashMap<>();
-        map.put("login", "some log3");
+        map.put("login", "some@log3.ua");
         // no pass
         HttpEntity<Map> entity = new HttpEntity<>(map, headers);
 

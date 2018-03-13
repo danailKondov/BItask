@@ -1,4 +1,6 @@
-package ru.bellintegrator.practice.orgs.controller.impl;
+package ru.bellintegrator.practice.orgs.view;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * Класс необходим, чтобы отображать параметры запроса в контроллере OrganisationControllerImpl
@@ -9,12 +11,13 @@ package ru.bellintegrator.practice.orgs.controller.impl;
 public class CriteriaView {
     private String name;
     private Long inn;
+    @JsonDeserialize(as=Boolean.class)
     private Boolean isActive;
 
     public CriteriaView() {
     }
 
-    public CriteriaView(String name, Long inn, Boolean isActive) {
+    public CriteriaView(String name, long inn, boolean isActive) {
         this.name = name;
         this.inn = inn;
         this.isActive = isActive;
@@ -32,7 +35,7 @@ public class CriteriaView {
         return inn;
     }
 
-    public void setInn(Long inn) {
+    public void setInn(long inn) {
         this.inn = inn;
     }
 
@@ -40,7 +43,7 @@ public class CriteriaView {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         isActive = active;
     }
 }

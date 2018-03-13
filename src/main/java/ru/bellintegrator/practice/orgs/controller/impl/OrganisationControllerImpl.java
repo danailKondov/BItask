@@ -9,12 +9,11 @@ import ru.bellintegrator.practice.Utils.CustomSuccessResponse;
 import ru.bellintegrator.practice.orgs.controller.OrganisationController;
 import ru.bellintegrator.practice.orgs.model.Organisation;
 import ru.bellintegrator.practice.orgs.service.OrganisationService;
+import ru.bellintegrator.practice.orgs.view.CriteriaView;
 
 import javax.validation.Valid;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -56,7 +55,7 @@ public class OrganisationControllerImpl implements OrganisationController {
 
     @Override
     @PostMapping(value = "/list")
-    public ResponseEntity getAllByCriteria(CriteriaView view) {
+    public ResponseEntity getAllByCriteria(@RequestBody CriteriaView view) {
         List<Organisation> list = service.getOrganisationsByCriteria(view.getName(), view.getInn(), view.isActive());
         CustomDataOut<List<Organisation>> dataOut = new CustomDataOut<>(list);
         return new ResponseEntity<>(dataOut, HttpStatus.FOUND);

@@ -7,6 +7,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
+import ru.bellintegrator.practice.Utils.CustomErrorResponse;
+import ru.bellintegrator.practice.Utils.CustomSuccessResponse;
 import ru.bellintegrator.practice.registration.model.Account;
 import ru.bellintegrator.practice.registration.service.AccountService;
 
@@ -33,12 +35,13 @@ public class AccountControllerImplTest {
     public void registerTest() {
         Account account = new Account("name", "log", "pass");
 
-        ResponseEntity<Map> result = accountController.register(account);
+        ResponseEntity<?> result = accountController.register(account);
 
         verify(accountService).add(account);
 
-        Map message = (Map) result.getBody().get("data");
-        String resultMessage = (String) message.get("result");
+        CustomSuccessResponse response = (CustomSuccessResponse) result.getBody();
+        Map<String, String> data = (Map) response.getData();
+        String resultMessage = data.get("result");
         assertTrue(resultMessage.equals("success"));
     }
 
@@ -56,10 +59,11 @@ public class AccountControllerImplTest {
         requestBody.put("password", "pass");
         when(accountService.verifyLogin("log", "pass")).thenReturn(true);
 
-        ResponseEntity<Map> result = accountController.login(requestBody);
+        ResponseEntity<?> result = accountController.login(requestBody);
 
-        Map message = (Map) result.getBody().get("data");
-        String resultMessage = (String) message.get("result");
+        CustomSuccessResponse response = (CustomSuccessResponse) result.getBody();
+        Map<String, String> data = (Map) response.getData();
+        String resultMessage = data.get("result");
         assertTrue(resultMessage.equals("success"));
     }
 
@@ -70,9 +74,9 @@ public class AccountControllerImplTest {
         requestBody.put("password", "pass");
         when(accountService.verifyLogin("log", "pass")).thenReturn(false);
 
-        ResponseEntity<Map> result = accountController.login(requestBody);
-        String resultMessage = (String) result.getBody().get("error");
-        assertTrue(resultMessage.equals("Password is wrong!"));
+        ResponseEntity<?> result = accountController.login(requestBody);
+        CustomErrorResponse response = (CustomErrorResponse) result.getBody();
+        assertTrue(response.getError().equals("Password is wrong!"));
     }
 
 }

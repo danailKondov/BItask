@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public interface AccountController {
 
-    ResponseEntity<Map> register(Account account);
+    ResponseEntity register(Account account);
     void accountActivation(String code);
-    ResponseEntity<Map> login(Map<String, String> map);
+    ResponseEntity login(Map<String, String> map);
 }

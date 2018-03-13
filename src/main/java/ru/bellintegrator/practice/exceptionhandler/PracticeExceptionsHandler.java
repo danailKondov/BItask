@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ru.bellintegrator.practice.Utils.CustomErrorResponse;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.AccountException;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.OrganisationException;
 
@@ -29,14 +30,12 @@ public class PracticeExceptionsHandler extends ResponseEntityExceptionHandler {
     /**
      * Обрабатывает исключение AccountException, OrganisationException.
      * @param e исключение
-     * @return объект-обертку (Map) с сообщением об ошибке
+     * @return объект-обертку с сообщением об ошибке
      */
     @ExceptionHandler({AccountException.class, OrganisationException.class})
-    protected @ResponseBody ResponseEntity<Map> handleAllCustomExceptions(RuntimeException e) {
+    protected @ResponseBody ResponseEntity<?> handleAllCustomExceptions(RuntimeException e) {
         log.error(e.getMessage(), e.getCause());
-        Map<String, String> result = new HashMap<>();
-        result.put("error", e.getMessage());
-        return new ResponseEntity<Map>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new CustomErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -45,32 +44,28 @@ public class PracticeExceptionsHandler extends ResponseEntityExceptionHandler {
      * @param headers заголовок http запроса/ответа
      * @param status статус http запроса/ответа
      * @param request http запрос
-     * @return объект-обертку (Map) с сообщением об ошибке
+     * @return объект-обертку с сообщением об ошибке
      */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(e.getMessage(), e.getCause());
-        Map<String, String> result = new HashMap<>();
         StringBuilder sb = new StringBuilder();
         for (ObjectError error : e.getBindingResult().getAllErrors()) {
             sb.append(error.getDefaultMessage());
             sb.append("  ");
         }
-        result.put("error", "Ошибка валидации: " + sb.toString());
-        return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new CustomErrorResponse("Ошибка валидации: " + sb.toString()), HttpStatus.BAD_REQUEST);
     }
 
     /**
      * Обрабатывает все прочие исключения, не обработанные ранее.
      * @param e исключение
-     * @return объект-обертку (Map) с сообщением об ошибке
+     * @return объект-обертку с сообщением об ошибке
      */
     @ExceptionHandler({Exception.class})
-    protected ResponseEntity<Map> handleAllExceptions(Exception e) {
+    protected ResponseEntity<?> handleAllExceptions(Exception e) {
         log.error(e.getMessage(), e);
-        Map<String, String> result = new HashMap<>();
-        result.put("error", "Internal Server Error");
-        return new ResponseEntity<Map>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new CustomErrorResponse("Internal Server Error"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 

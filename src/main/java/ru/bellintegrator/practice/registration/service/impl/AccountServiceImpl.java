@@ -11,6 +11,7 @@ import ru.bellintegrator.practice.exceptionhandler.exceptions.AccountException;
 import ru.bellintegrator.practice.registration.dao.AccountDAO;
 import ru.bellintegrator.practice.registration.model.Account;
 import ru.bellintegrator.practice.registration.service.AccountService;
+import ru.bellintegrator.practice.registration.service.ComputeHashService;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -39,6 +40,8 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountDAO accountDAO;
 
+    private final ComputeHashService hashService;
+
     /**
      * Поле является имитацией части функционала отправки кода подтверждения регистрации,
      * отсутствующего в учебном проекте.
@@ -46,14 +49,14 @@ public class AccountServiceImpl implements AccountService {
     private String codeForActivation;
 
     @Autowired
-    public AccountServiceImpl(AccountDAO accountDAO) {
+    public AccountServiceImpl(AccountDAO accountDAO, ComputeHashService hashService) {
         this.accountDAO = accountDAO;
+        this.hashService = hashService;
     }
 
     @Override
     @Transactional
     public boolean add(Account account) {
-        try {
             if (loginIsFree(account.getLogin())) {
                 changePassToHash(account);
                 setActivationCode(account);
@@ -61,19 +64,16 @@ public class AccountServiceImpl implements AccountService {
             } else {
                 throw new AccountException("Подобный логин уже существует: " + account.getLogin());
             }
-        } catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
-            throw new AccountException("Ошибка создания аккаунта: ошибка кодирования пароля", e);
-        }
     }
 
     /**
      * Генерирует случайный код активации и вставляем его хэш в аккаунт, предварительно закодировав в base64.
      * @param account акк
      */
-    private void setActivationCode(Account account) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    private void setActivationCode(Account account) {
         String activationCode = getRandomString();
         codeForActivation = activationCode;
-        String hashFromActivationCode = getSHA256HashFromString(activationCode);
+        String hashFromActivationCode = hashService.getSHA256HashFromString(activationCode);
         account.setActivationCode(hashFromActivationCode);
     }
 
@@ -81,8 +81,8 @@ public class AccountServiceImpl implements AccountService {
      * Заменяет пароль на хэш SHA256 в аккаунте для его безопасного хранения.
      * @param account акк
      */
-    private void changePassToHash(Account account) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        String hashFromPass = getSHA256HashFromString(account.getPassword());
+    private void changePassToHash(Account account) {
+        String hashFromPass = hashService.getSHA256HashFromString(account.getPassword());
         account.setPassword(hashFromPass);
     }
 
@@ -101,11 +101,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional (readOnly = true)
     public boolean verifyLogin(String login, String password) {
-        try {
             if (login == null || password == null) { // нужна ли подобная проверка?
                 throw new AccountException("Отсутствует логин или пароль");
             } else {
-                String hashFromPass = getSHA256HashFromString(password);
+                String hashFromPass = hashService.getSHA256HashFromString(password);
                 Account account = accountDAO.getAccountByLogin(login);
                 if (account == null) {
                     throw new AccountException("Нет аккаунта с подобным логином в базе данных: " + login);
@@ -113,26 +112,16 @@ public class AccountServiceImpl implements AccountService {
                     return hashFromPass.equals(account.getPassword());
                 }
             }
-        } catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
-            throw new AccountException("Ошибка верификации логина: ошибка кодирования пароля", e);
-        }
     }
 
     private boolean loginIsFree(String login) {
         return accountDAO.getAccountByLogin(login) == null;
     }
 
-    private String getSHA256HashFromString(String source) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        MessageDigest encoder = MessageDigest.getInstance("SHA-256");
-        byte[] digest = encoder.digest(source.getBytes("UTF-8"));
-        return new String(Base64.getEncoder().encode(digest));
-    }
-
     @Override
     @Transactional
     public boolean activateAccountByCode(String code) {
-        try {
-            String hashFromActivationCode = getSHA256HashFromString(code);
+            String hashFromActivationCode = hashService.getSHA256HashFromString(code);
             Account account = accountDAO.getAccountByCode(hashFromActivationCode);
             if (account != null) {
                 account.setActivated(true);
@@ -141,9 +130,6 @@ public class AccountServiceImpl implements AccountService {
             } else {
                 throw new AccountException("Нет аккаунта с данным кодом активации: " + code);
             }
-        } catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
-            throw new AccountException("Ошибка активации аккаунта: ошибка кодирования кода активации", e);
-        }
     }
 
     /**

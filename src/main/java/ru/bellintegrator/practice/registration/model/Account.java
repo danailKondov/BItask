@@ -1,5 +1,7 @@
 package ru.bellintegrator.practice.registration.model;
 
+import org.hibernate.validator.constraints.Email;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -24,7 +26,7 @@ public class Account implements Serializable{
 
     @Basic(optional = false)
     @Column(length = 50)
-    @Size(min=3, max = 50)
+    @Email // по условию логин является мейлом
     private String login;
 
     @Basic(optional = false)

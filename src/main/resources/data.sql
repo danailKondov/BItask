@@ -42,10 +42,13 @@ VALUES (585, 'Республика Палау');
 /* --------- organisations ----------- */
 
 INSERT INTO organisations (name, full_name, inn, kpp, address, phone, is_active)
-VALUES ('SomeOrg', 'Some Unknown Organisation', 123654789874, 321654987, 'Vologda, 1-ya Lenina st, 59B', 89057889878, true);
+VALUES ('SomeOrg', 'Some Unknown Organisation', 123654789874, 321654987, 'Vologda, 1-ya Lenina st, 59B', 89057889878, TRUE);
 
 INSERT INTO organisations (name, full_name, inn, kpp, address, phone, is_active)
-VALUES ('MockOrg', 'Mocking Organisation', 542634789874, 322544987, 'Samara, Mashinostroenia st, 25A', 89107999878, true);
+VALUES ('MockOrg', 'Mocking Organisation', 542634789874, 322544987, 'Samara, Mashinostroenia st, 25A', 89107999878, TRUE);
+
+INSERT INTO organisations (name, full_name, inn, kpp, address, phone, is_active)
+VALUES ('MockName', 'Big Mocking Organisation', 54254689874, 322788987, 'Moscow, Blinnaia st, 24A', 89106559878, FALSE );
 
 /* --------- offices ----------- */
 

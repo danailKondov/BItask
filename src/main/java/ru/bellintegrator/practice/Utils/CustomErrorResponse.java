@@ -3,11 +3,11 @@ package ru.bellintegrator.practice.Utils;
 /**
  * Created on 11.03.2018.
  */
-public class CustomErrorResonse {
+public class CustomErrorResponse {
 
     private String error;
 
-    public CustomErrorResonse(String error) {
+    public CustomErrorResponse(String error) {
         this.error = error;
     }
 
