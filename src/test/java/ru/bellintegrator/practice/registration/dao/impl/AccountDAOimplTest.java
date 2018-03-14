@@ -33,7 +33,7 @@ public class AccountDAOimplTest {
 
     @Test
     public void saveTest() {
-        Account account = new Account("name", "log", "pass");
+        Account account = new Account("name", "log@mail.com", "pass");
         account.setActivationCode("activation code");
         accountDAO.save(account);
         List<Account> accounts = accountDAO.getAllAccounts();
@@ -42,10 +42,10 @@ public class AccountDAOimplTest {
 
     @Test
     public void getAccByLoginTest() {
-        Account account = new Account("name", "log", "pass");
+        Account account = new Account("name", "log2@mail.com", "pass");
         account.setActivationCode("activation code");
         accountDAO.save(account);
-        Account account1 = accountDAO.getAccountByLogin("log");
+        Account account1 = accountDAO.getAccountByLogin("log2@mail.com");
         assertTrue(account.equals(account1));
     }
 
@@ -58,13 +58,13 @@ public class AccountDAOimplTest {
     @Test
     public void getAllAccsWhenThereIsAccsTest() {
         accountDAO.deleteAllAccounts();
-        Account account = new Account("name", "log", "pass");
+        Account account = new Account("name", "log@mail.com", "pass");
         account.setActivationCode("activation code");
         accountDAO.save(account);
-        Account account2 = new Account("name2", "log2", "pass2");
+        Account account2 = new Account("name2", "log2@mail.com", "pass2");
         account2.setActivationCode("activation code2");
         accountDAO.save(account2);
-        Account account3 = new Account("name3", "log3", "pass3");
+        Account account3 = new Account("name3", "log3@mail.com", "pass3");
         account3.setActivationCode("activation code3");
         accountDAO.save(account3);
 
@@ -85,7 +85,7 @@ public class AccountDAOimplTest {
     @Test
     public void getAccByCodeWhenThereIsAccTest() {
         accountDAO.deleteAllAccounts();
-        Account account = new Account("name", "log", "pass");
+        Account account = new Account("name", "log@mail.com", "pass");
         account.setActivationCode("activation code");
         accountDAO.save(account);
 
@@ -103,14 +103,14 @@ public class AccountDAOimplTest {
     @Test
     public void updateTest() {
         accountDAO.deleteAllAccounts();
-        Account account = new Account("name", "log", "pass");
+        Account account = new Account("name", "log@mail.com", "pass");
         account.setActivationCode("activation code");
         accountDAO.save(account);
 
         account.setName("new name");
         accountDAO.update(account);
 
-        Account account1 = accountDAO.getAccountByLogin("log");
+        Account account1 = accountDAO.getAccountByLogin("log@mail.com");
         assertTrue(account1.getName().equals("new name"));
     }
 }

@@ -13,5 +13,5 @@ public interface OrganisationService {
     Organisation getOrganisationById(long id);
     void save(Organisation organisation);
     void update(Organisation organisation);
-    List<Organisation> getOrganisationsByCriteria(String name, Long inn, Boolean active);
+    List<Organisation> getOrganisationsByCriteria(String name, String inn, Boolean active);
 }

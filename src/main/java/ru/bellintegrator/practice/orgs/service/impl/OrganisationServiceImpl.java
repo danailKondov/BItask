@@ -38,7 +38,7 @@ public class OrganisationServiceImpl implements OrganisationService {
     @Override
     @Transactional(readOnly = true)
     public Organisation getOrganisationById(long id) {
-        Organisation organisation = repository.findOne(id); // по условию, возвращаем только активные
+        Organisation organisation = repository.findOne(id);
         if (organisation != null) {
             return organisation;
         } else {
@@ -66,18 +66,17 @@ public class OrganisationServiceImpl implements OrganisationService {
         }
     }
 
-    // пока не пашет((
     @Override
-    public List<Organisation> getOrganisationsByCriteria(String name, Long inn, Boolean active) {
+    public List<Organisation> getOrganisationsByCriteria(String name, String inn, Boolean active) {
         Specification<Organisation> spec = new Specification<Organisation>() {
             @Override
             public Predicate toPredicate(Root<Organisation> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new ArrayList<>();
                 if (name != null) {
-                    predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%")); // неточное совпадение, обязательный параметр?
+                    predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%")); // неточное совпадение
                 }
                 if (inn != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("inn"), inn)); // что если result = null?
+                    predicates.add(criteriaBuilder.equal(root.get("inn"), inn));
                 }
                 if (active != null) {
                     predicates.add(criteriaBuilder.equal(root.get("isActive"), active));
