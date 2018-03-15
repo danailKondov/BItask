@@ -11,6 +11,7 @@ import ru.bellintegrator.practice.exceptionhandler.exceptions.OrganisationExcept
 import ru.bellintegrator.practice.orgs.dao.OrganisationRepository;
 import ru.bellintegrator.practice.orgs.model.Organisation;
 import ru.bellintegrator.practice.orgs.service.OrganisationService;
+import ru.bellintegrator.practice.orgs.view.OrgDTO;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -67,7 +68,7 @@ public class OrganisationServiceImpl implements OrganisationService {
     }
 
     @Override
-    public List<Organisation> getOrganisationsByCriteria(String name, String inn, Boolean active) {
+    public List<OrgDTO> getOrganisationsByCriteria(String name, String inn, Boolean active) {
         Specification<Organisation> spec = new Specification<Organisation>() {
             @Override
             public Predicate toPredicate(Root<Organisation> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -90,6 +91,20 @@ public class OrganisationServiceImpl implements OrganisationService {
                 }
             }
         };
-        return repository.findAll(spec);
+        List<Organisation> list = repository.findAll(spec);
+        List<OrgDTO> result = new ArrayList<>();
+        for (Organisation organisation : list) {
+            OrgDTO dto = new OrgDTO();
+            dto.setId(organisation.getId());
+            dto.setName(organisation.getName());
+            dto.setActive(organisation.isActive());
+            result.add(dto);
+        }
+        return result;
+    }
+
+    @Override
+    public void deleteOrganisationById(long id) {
+        repository.delete(id);
     }
 }

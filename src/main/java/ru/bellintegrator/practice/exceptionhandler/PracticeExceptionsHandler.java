@@ -14,6 +14,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.bellintegrator.practice.Utils.CustomErrorResponse;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.AccountException;
+import ru.bellintegrator.practice.exceptionhandler.exceptions.OfficeException;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.OrganisationException;
 
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class PracticeExceptionsHandler extends ResponseEntityExceptionHandler {
      * @param e исключение
      * @return объект-обертку с сообщением об ошибке
      */
-    @ExceptionHandler({AccountException.class, OrganisationException.class})
+    @ExceptionHandler({AccountException.class, OrganisationException.class, OfficeException.class})
     protected @ResponseBody ResponseEntity<?> handleAllCustomExceptions(RuntimeException e) {
         log.error(e.getMessage(), e.getCause());
         return new ResponseEntity<>(new CustomErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);

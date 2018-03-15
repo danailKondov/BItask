@@ -1,11 +1,11 @@
 package ru.bellintegrator.practice.orgs.model;
 
-import org.springframework.data.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 import javax.persistence.Id;
 import javax.persistence.Version;
-import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -120,6 +120,7 @@ public class Organisation implements Serializable {
         this.phone = phone;
     }
 
+    @JsonProperty(value = "isActive")
     public boolean isActive() {
         return isActive;
     }

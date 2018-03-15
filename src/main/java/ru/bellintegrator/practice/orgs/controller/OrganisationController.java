@@ -12,5 +12,6 @@ public interface OrganisationController {
     ResponseEntity<?> getOrganisationById(long id);
     ResponseEntity<?> saveOrganisation(Organisation organisation);
     ResponseEntity<?> updateOrganisation(Organisation organisation);
-    public ResponseEntity getAllByCriteria(CriteriaView view);
+    ResponseEntity getAllByCriteria(CriteriaView view);
+    ResponseEntity deleteOrganisation(Organisation organisation);
 }

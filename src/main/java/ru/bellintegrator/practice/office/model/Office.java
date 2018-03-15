@@ -1,8 +1,11 @@
 package ru.bellintegrator.practice.office.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.bellintegrator.practice.orgs.model.Organisation;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -14,30 +17,23 @@ public class Office implements Serializable {
 
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
 
+//    @org.springframework.data.annotation.Transient - из-за этого не работала сериализация
+    @JsonIgnore
     @Version
     private Integer version = 0;
 
+//    @org.springframework.data.annotation.Transient
+    @JsonIgnore
     @ManyToOne(
             fetch = FetchType.LAZY,
             optional = false
-            /*cascade = CascadeType.ALL*/)
-    // почему-то при этом не могу удалить организацию из-за "Нарушение ссылочной целостности",
-    // странно - возможно, ошибочно выставил и ставить каскейд надо в организации и делать связь двунаправленной.
-
-
-//    As I explained in this article and in my book, High-Performance Java Persistence,
-//    you should never use CascadeType.ALL on @ManyToOne since entity state transitions should propagate from Parent entities to Child ones.
-//
-//    The @ManyToOne side is always the Child association since it should map the underlying FK.
-//
-//    Therefore, move the CascadeType.ALL from the @ManyToOne association to the @OneToMany
-//    which should use the mappedBy attribute since it's the most efficient one-to-many mapping. `
-
+    )
     @JoinColumn(name = "org_id")
     private Organisation organisation;
 
+    @NotNull
     @Basic(optional = false)
     private String name;
 
@@ -59,7 +55,7 @@ public class Office implements Serializable {
         this.isActive = isActive;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -96,6 +92,7 @@ public class Office implements Serializable {
         this.phone = phone;
     }
 
+    @JsonProperty(value = "isActive")
     public boolean isActive() {
         return isActive;
     }

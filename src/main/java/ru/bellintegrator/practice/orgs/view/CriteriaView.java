@@ -1,9 +1,6 @@
 package ru.bellintegrator.practice.orgs.view;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 /**
  * Класс необходим, чтобы отображать параметры запроса в контроллере OrganisationControllerImpl
@@ -14,9 +11,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 public class CriteriaView {
     private String name;
     private String inn;
-//    @JsonDeserialize(as=Boolean.class)
-//    @JsonProperty
-//    @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
+    @JsonProperty(value = "isActive")
     private Boolean isActive;
 
     public CriteriaView() {

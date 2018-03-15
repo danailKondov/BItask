@@ -10,10 +10,12 @@ import ru.bellintegrator.practice.orgs.controller.OrganisationController;
 import ru.bellintegrator.practice.orgs.model.Organisation;
 import ru.bellintegrator.practice.orgs.service.OrganisationService;
 import ru.bellintegrator.practice.orgs.view.CriteriaView;
+import ru.bellintegrator.practice.orgs.view.OrgDTO;
 
 import javax.validation.Valid;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -21,7 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  * Created on 11.03.2018.
  */
 @RestController
-@RequestMapping(value = "/api/organisation", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/organisation")
 public class OrganisationControllerImpl implements OrganisationController {
 
     private OrganisationService service;
@@ -56,9 +58,17 @@ public class OrganisationControllerImpl implements OrganisationController {
     @Override
     @PostMapping(value = "/list")
     public ResponseEntity getAllByCriteria(@RequestBody CriteriaView view) {
-        List<Organisation> list = service.getOrganisationsByCriteria(view.getName(), view.getInn(), view.isActive());
-        CustomDataOut<List<Organisation>> dataOut = new CustomDataOut<>(list);
+        List<OrgDTO> list = service.getOrganisationsByCriteria(view.getName(), view.getInn(), view.isActive());
+        CustomDataOut<List<OrgDTO>> dataOut = new CustomDataOut<>(list);
         return new ResponseEntity<>(dataOut, HttpStatus.FOUND);
+    }
+
+    @Override
+    @PostMapping(value = "/delete")
+    public ResponseEntity deleteOrganisation(@RequestBody Organisation organisation) {
+        long id = organisation.getId();
+        service.deleteOrganisationById(id);
+        return new ResponseEntity<>(new CustomSuccessResponse(), HttpStatus.OK);
     }
 
 }

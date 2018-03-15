@@ -1,5 +1,6 @@
 package ru.bellintegrator.practice.orgs.controller.impl;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +13,6 @@ import ru.bellintegrator.practice.Application;
 import ru.bellintegrator.practice.orgs.dao.OrganisationRepository;
 import ru.bellintegrator.practice.orgs.model.Organisation;
 import ru.bellintegrator.practice.orgs.service.OrganisationService;
-import ru.bellintegrator.practice.orgs.view.CriteriaView;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -56,14 +56,14 @@ public class OrganisationControllerIntegrateTest {
         HttpEntity entity = new HttpEntity<>(headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         String expected = "{\"data\":" +
-                "{\"id\":4," +
+                "{\"id\":"+ id + "," +
                 "\"name\":\"someNewOrg\"," +
                 "\"fullName\":\"Some Org ltd.\"," +
                 "\"inn\":\"542634745674\"," +
                 "\"kpp\":\"322544987\"," +
                 "\"address\":\"Samara, Mashinostroenia st, 27A\"," +
                 "\"phone\":\"89107997878\"," +
-                "\"active\":true}}";
+                "\"isActive\":true}}";
         String result = response.getBody();
         assertThat(result, is(expected));
     }
@@ -158,6 +158,27 @@ public class OrganisationControllerIntegrateTest {
 
     @Test
     public void getAllByCriteriaWhenOneCriteriaTest() {
+        addToDBSomeOrganisations();
+
+//        CriteriaView view = new CriteriaView(null, "542786545674", null);
+        // isActive null = "false", причем из Postman все ок, проблема где-то в объекте
+
+        String body = "{\"inn\" : \"542786545674\"}";
+        HttpEntity entity = new HttpEntity<>(body, headers);
+        String url = "/api/organisation/list";
+        long id = repository.findOrganisationByName("White").getId();
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+        String expected = "{\"data\":" +
+                "[{\"id\":" + id + "," +
+                "\"name\":\"White\"," +
+                "\"isActive\":true}]}";
+        String result = response.getBody();
+        assertThat(result, is(expected));
+    }
+
+    private void addToDBSomeOrganisations() {
         Organisation orgInDB = new Organisation("White",
                 "White ltd.", "542786545674", "324544987",
                 "Samara, Mashinostroenia st, 27A", "89107997878", true);
@@ -174,25 +195,106 @@ public class OrganisationControllerIntegrateTest {
                 "New Org ltd.", "125434745674", "322544987",
                 "Samara, Mashinostroenia st, 27A", "89107997878", true);
         service.save(orgInDB4);
+        Organisation orgInDB5 = new Organisation("Pretty Org",
+                "Pretty Org ltd.", "987434745674", "322544987",
+                "Samara, Mashinostroenia st, 27A", "89107997878", true);
+        service.save(orgInDB5);
+    }
 
-//        CriteriaView view = new CriteriaView(null, "542786545674", null);
-        // isActive null = "false", причем из Postman все ок, проблема где-то в объекте
-        String body = "{\"inn\" : \"542786545674\"}";
+    @Test
+    public void getAllByCriteriaWhenTwoCriteriaTest() {
+        addToDBSomeOrganisations();
+
+        String body = "{\"name\" : \"Org\", \"isActive\" : \"true\"}";
+        HttpEntity entity = new HttpEntity<>(body, headers);
+        String url = "/api/organisation/list";
+
+        long id1 = repository.findOrganisationByName("New Org").getId();
+        long id2 = repository.findOrganisationByName("Pretty Org").getId();
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+        String expected = "{\"data\":" +
+                "[{\"id\":" + id1 + "," +
+                "\"name\":\"New Org\"," +
+                "\"isActive\":true}," +
+                "{\"id\":" + id2 + "," +
+                "\"name\":\"Pretty Org\"," +
+                "\"isActive\":true}]}";
+        String result = response.getBody();
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    public void getAllByCriteriaWhenThreeCriteriaTest() {
+        addToDBSomeOrganisations();
+
+        String body = "{\"name\" : \"Org\", \"inn\": \"987434745674\", \"isActive\" : \"true\"}";
+        HttpEntity entity = new HttpEntity<>(body, headers);
+        String url = "/api/organisation/list";
+
+        long id = repository.findOrganisationByName("Pretty Org").getId();
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+        String expected = "{\"data\":" +
+                "[{\"id\":" + id + "," +
+                "\"name\":\"Pretty Org\"," +
+                "\"isActive\":true}]}";
+        String result = response.getBody();
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    public void getAllByCriteriaWhenNoCriteriaTest() {
+        addToDBSomeOrganisations();
+
+        long id1 = repository.findOrganisationByName("White").getId();
+        long id2 = repository.findOrganisationByName("Black").getId();
+        long id3 = repository.findOrganisationByName("Blue Org").getId();
+        long id4 = repository.findOrganisationByName("New Org").getId();
+        long id5 = repository.findOrganisationByName("Pretty Org").getId();
+
+        String body = "{}";
         HttpEntity entity = new HttpEntity<>(body, headers);
         String url = "/api/organisation/list";
 
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 
         String expected = "{\"data\":" +
-                "[{\"id\":4," +
+                "[{\"id\":" + id1 + "," +
                 "\"name\":\"White\"," +
-                "\"fullName\":\"White ltd.\"," +
-                "\"inn\":\"542786545674\"," +
-                "\"kpp\":\"324544987\"," +
-                "\"address\":\"Samara, Mashinostroenia st, 27A\"," +
-                "\"phone\":\"89107997878\"," +
-                "\"active\":true}]}";
+                "\"isActive\":true}," +
+                "{\"id\":" + id2 + "," +
+                "\"name\":\"Black\"," +
+                "\"isActive\":false}," +
+                "{\"id\":" + id3 + "," +
+                "\"name\":\"Blue Org\"," +
+                "\"isActive\":false}," +
+                "{\"id\":" + id4 + "," +
+                "\"name\":\"New Org\"," +
+                "\"isActive\":true}," +
+                "{\"id\":" + id5 + "," +
+                "\"name\":\"Pretty Org\"," +
+                "\"isActive\":true}]}";
         String result = response.getBody();
         assertThat(result, is(expected));
+    }
+
+    @Test
+    public void deleteByIdTest() {
+        addToDBSomeOrganisations();
+        long id = repository.findOrganisationByName("White").getId();
+
+        String body = "{\"id\" : " + id + "}";
+        HttpEntity entity = new HttpEntity<>(body, headers);
+        String url = "/api/organisation/delete";
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+        String expected = "{\"data\":{\"result\":\"success\"}}";
+        String result = response.getBody();
+        assertThat(result, is(expected));
+        assertNull(repository.findOrganisationByName("White"));
     }
 }
