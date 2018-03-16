@@ -37,9 +37,9 @@ CREATE TABLE IF NOT EXISTS offices (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	version INTEGER NOT NULL,
 	org_id INTEGER NOT NULL,
-	name VARCHAR(255) NOT NULL,
+	name VARCHAR(255),
 	address VARCHAR(255),
-	phone bigint,
+	phone VARCHAR(100),
 	is_active boolean,
 	FOREIGN KEY (org_id) REFERENCES organisations(id) 
 	ON DELETE CASCADE

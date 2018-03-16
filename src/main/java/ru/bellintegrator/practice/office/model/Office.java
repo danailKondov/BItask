@@ -6,6 +6,7 @@ import ru.bellintegrator.practice.orgs.model.Organisation;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -17,7 +18,7 @@ public class Office implements Serializable {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
 //    @org.springframework.data.annotation.Transient - из-за этого не работала сериализация
     @JsonIgnore
@@ -27,35 +28,32 @@ public class Office implements Serializable {
 //    @org.springframework.data.annotation.Transient
     @JsonIgnore
     @ManyToOne(
-            fetch = FetchType.LAZY,
-            optional = false
+            fetch = FetchType.LAZY
     )
     @JoinColumn(name = "org_id")
     private Organisation organisation;
 
+    @Transient
+    private Long orgId; // для JSON маппинга
+
     @NotNull
+    @Size(min = 3, max = 255)
     @Basic(optional = false)
     private String name;
 
     private String address;
 
-    private long phone;
+    private String phone;
 
     @Column(name = "is_active")
-    private boolean isActive;
+    private Boolean isActive;
 
     public Office() {
     }
 
-    public Office(Organisation organisation, String name, String address, long phone, boolean isActive) {
-        this.organisation = organisation;
-        this.name = name;
-        this.address = address;
-        this.phone = phone;
-        this.isActive = isActive;
-    }
+    // добавить конструктор с параметрами при тестировании
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -84,20 +82,28 @@ public class Office implements Serializable {
         this.address = address;
     }
 
-    public long getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(long phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
     @JsonProperty(value = "isActive")
-    public boolean isActive() {
+    public Boolean isActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public Long getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(Long orgId) {
+        this.orgId = orgId;
     }
 }

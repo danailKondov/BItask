@@ -67,11 +67,13 @@ public class OrganisationServiceImplTest {
         Organisation organisation = new Organisation("someNewOrg",
                 "Some Org ltd.", "542634745674", "322544987",
                 "Samara, Mashinostroenia st, 27A", "89107997878", true);
-        when(repository.exists(organisation.getId())).thenReturn(true);
+        organisation.setId(1L);
+        Organisation orgToUpdate = new Organisation();
+        when(repository.findOne(organisation.getId())).thenReturn(orgToUpdate);
 
         service.update(organisation);
 
-        verify(repository).save(organisation);
+        verify(repository).save(orgToUpdate);
     }
 
     @Test (expected = OrganisationException.class)
@@ -79,7 +81,8 @@ public class OrganisationServiceImplTest {
         Organisation organisation = new Organisation("someNewOrg",
                 "Some Org ltd.", "542634745674", "322544987",
                 "Samara, Mashinostroenia st, 27A", "89107997878", true);
-        when(repository.exists(organisation.getId())).thenReturn(false);
+        organisation.setId(1L);
+        when(repository.findOne(organisation.getId())).thenReturn(null);
         service.update(organisation);
     }
 }

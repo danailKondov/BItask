@@ -19,7 +19,7 @@ public class Organisation implements Serializable {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @org.springframework.data.annotation.Transient
     @Version
@@ -64,7 +64,7 @@ public class Organisation implements Serializable {
         this.isActive = isActive;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

@@ -60,8 +60,18 @@ public class OrganisationServiceImpl implements OrganisationService {
 
     @Override
     public void update(Organisation organisation) {
-        if(repository.exists(organisation.getId())) {
-            repository.save(organisation);
+        if (organisation.getId() == null) throw new OrganisationException("Невозможно обновить организацию: остутствует ID");
+        // иначе не работает @Version
+        Organisation orgToUpdate = repository.findOne(organisation.getId());
+        if (orgToUpdate != null) {
+            orgToUpdate.setName(organisation.getName());
+            orgToUpdate.setFullName(organisation.getFullName());
+            orgToUpdate.setInn(organisation.getInn());
+            orgToUpdate.setKpp(organisation.getKpp());
+            orgToUpdate.setAddress(organisation.getAddress());
+            orgToUpdate.setPhone(organisation.getPhone());
+            orgToUpdate.setActive(organisation.isActive());
+            repository.save(orgToUpdate);
         } else {
             throw new OrganisationException("Невозможно обновить - организации с подобным ID нет в базе: " + organisation.getId());
         }

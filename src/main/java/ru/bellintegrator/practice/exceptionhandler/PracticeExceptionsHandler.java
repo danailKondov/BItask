@@ -2,6 +2,7 @@ package ru.bellintegrator.practice.exceptionhandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,17 @@ public class PracticeExceptionsHandler extends ResponseEntityExceptionHandler {
     protected @ResponseBody ResponseEntity<?> handleAllCustomExceptions(RuntimeException e) {
         log.error(e.getMessage(), e.getCause());
         return new ResponseEntity<>(new CustomErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * Щбрабатывает исключения ввода/вывода
+     * @param e исключение
+     * @return объект-обертку с сообщением об ошибке
+     */
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    protected @ResponseBody ResponseEntity<?> handleDaoExceptions(RuntimeException e) {
+        log.error(e.getMessage(), e.getCause());
+        return new ResponseEntity<>(new CustomErrorResponse(e.getLocalizedMessage()), HttpStatus.NOT_FOUND);
     }
 
     /**

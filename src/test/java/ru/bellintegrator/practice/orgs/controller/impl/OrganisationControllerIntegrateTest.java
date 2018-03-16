@@ -282,7 +282,7 @@ public class OrganisationControllerIntegrateTest {
     }
 
     @Test
-    public void deleteByIdTest() {
+    public void deleteOrganisationByIdWhenSuccessfulTest() {
         addToDBSomeOrganisations();
         long id = repository.findOrganisationByName("White").getId();
 
@@ -296,5 +296,18 @@ public class OrganisationControllerIntegrateTest {
         String result = response.getBody();
         assertThat(result, is(expected));
         assertNull(repository.findOrganisationByName("White"));
+    }
+
+    @Test
+    public void deleteOrganisationByIdWhenFailTest() {
+        String body = "{\"id\" : 100500}";
+        HttpEntity entity = new HttpEntity<>(body, headers);
+        String url = "/api/organisation/delete";
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+        String expected = "{\"error\":\"No class ru.bellintegrator.practice.orgs.model.Organisation entity with id 100500 exists!\"}";
+        String result = response.getBody();
+        assertThat(result, is(expected));
     }
 }
