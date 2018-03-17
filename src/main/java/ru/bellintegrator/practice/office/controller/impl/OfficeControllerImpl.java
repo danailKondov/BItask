@@ -42,7 +42,7 @@ public class OfficeControllerImpl implements OfficeController {
 
     @Override
     @PostMapping(value = "/update")
-    public ResponseEntity updateOffice(@RequestBody @Valid Office office) {
+    public ResponseEntity updateOffice(@RequestBody Office office) { // поменять на view c orgId
         service.updateOffice(office);
         return new ResponseEntity<>(new CustomSuccessResponse(), HttpStatus.OK);
     }
@@ -56,7 +56,9 @@ public class OfficeControllerImpl implements OfficeController {
 
     @Override
     @PostMapping(value = "/save")
-    public ResponseEntity saveOffice(@RequestBody Office office) {
+    public ResponseEntity saveOffice(@RequestBody OfficeView view) {
+        Office office = new Office(view.getName(), view.getAddress(), view.getPhone(), view.getActive());
+        office.setOrgId(view.getOrgId());
         service.saveOffice(office);
         return new ResponseEntity<>(new CustomSuccessResponse(), HttpStatus.OK);
     }

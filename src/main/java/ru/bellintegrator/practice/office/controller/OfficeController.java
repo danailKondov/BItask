@@ -12,6 +12,6 @@ public interface OfficeController {
     ResponseEntity<?> getOfficeById(long id);
     ResponseEntity updateOffice(Office office);
     ResponseEntity deleteOffice(Office office);
-    ResponseEntity saveOffice(Office office);
+    ResponseEntity saveOffice(OfficeView view);
     ResponseEntity getAllByCriteria(OfficeView view);
 }

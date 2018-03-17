@@ -77,7 +77,7 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     public void saveOffice(Office office) {
-        Long orgId = office.getOrgId();
+        Long orgId = office.getOrgId(); // откуда он приходит?
         if (orgId == null) throw new OfficeException("Невозможно сохранить офис без ID организации");
         Organisation organisation = organisationRepository.findOne(orgId);
         if (organisation != null) {

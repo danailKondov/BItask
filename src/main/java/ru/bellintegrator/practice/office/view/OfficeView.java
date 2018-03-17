@@ -9,6 +9,7 @@ public class OfficeView {
 
     private Long orgId;
     private String name;
+    private String address;
     private String phone;
     @JsonProperty(value = "isActive")
     private Boolean isActive;
@@ -43,5 +44,13 @@ public class OfficeView {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

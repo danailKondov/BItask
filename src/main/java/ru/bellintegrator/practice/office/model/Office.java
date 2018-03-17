@@ -34,6 +34,7 @@ public class Office implements Serializable {
     private Organisation organisation;
 
     @Transient
+    @JsonIgnore
     private Long orgId; // для JSON маппинга
 
     @NotNull
@@ -51,10 +52,21 @@ public class Office implements Serializable {
     public Office() {
     }
 
+    public Office(String name, String address, String phone, Boolean isActive) {
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.isActive = isActive;
+    }
+
     // добавить конструктор с параметрами при тестировании
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     // обязательный параметр orgId получаем через организацию: getOrganisation().getId()
@@ -105,5 +117,28 @@ public class Office implements Serializable {
 
     public void setOrgId(Long orgId) {
         this.orgId = orgId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Office office = (Office) o;
+
+        if (getName() != null ? !getName().equals(office.getName()) : office.getName() != null) return false;
+        if (getAddress() != null ? !getAddress().equals(office.getAddress()) : office.getAddress() != null)
+            return false;
+        if (getPhone() != null ? !getPhone().equals(office.getPhone()) : office.getPhone() != null) return false;
+        return isActive != null ? isActive.equals(office.isActive) : office.isActive == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getName() != null ? getName().hashCode() : 0;
+        result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
+        result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
+        result = 31 * result + (isActive != null ? isActive.hashCode() : 0);
+        return result;
     }
 }
