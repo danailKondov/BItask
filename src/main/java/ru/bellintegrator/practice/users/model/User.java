@@ -1,5 +1,7 @@
 package ru.bellintegrator.practice.users.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.referencebook.model.Country;
 import ru.bellintegrator.practice.referencebook.model.Document;
@@ -17,15 +19,12 @@ public class User implements Serializable{
 
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
 
     @Version
     private Integer version = 0;
 
-    @ManyToOne(
-            fetch = FetchType.LAZY,
-            optional = false,
-            cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "office_id")
     private Office office;
 
@@ -41,11 +40,11 @@ public class User implements Serializable{
     @Column(length = 50)
     private String position;
 
-    private long phone;
+    private String phone;
 
     // приходят с фронта, где берутся из справочника
     @ManyToOne(
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             optional = false
     )
     @JoinColumn(name = "doc_code")
@@ -53,7 +52,7 @@ public class User implements Serializable{
 
     @Basic(optional = false)
     @Column(name = "doc_number")
-    private long docNumber;
+    private String docNumber;
 
     @Basic(optional = false)
     @Temporal(TemporalType.DATE)
@@ -62,7 +61,7 @@ public class User implements Serializable{
 
     // приходят с фронта, где берутся из справочника
     @ManyToOne(
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             optional = false
     )
     @JoinColumn(name = "citizenship_code")
@@ -74,7 +73,7 @@ public class User implements Serializable{
     public User() {
     }
 
-    public User(Office office, String firstName, String lastName, String middleName, String position, long phone, Document document, long docNumber, Date docDate, Country country, boolean isIdentified) {
+    public User(Office office, String firstName, String lastName, String middleName, String position, String phone, Document document, String docNumber, Date docDate, Country country, boolean isIdentified) {
         this.office = office;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -88,7 +87,7 @@ public class User implements Serializable{
         this.isIdentified = isIdentified;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -132,11 +131,11 @@ public class User implements Serializable{
         this.position = position;
     }
 
-    public long getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(long phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -148,11 +147,11 @@ public class User implements Serializable{
         this.document = document;
     }
 
-    public long getDocNumber() {
+    public String getDocNumber() {
         return docNumber;
     }
 
-    public void setDocNumber(long docNumber) {
+    public void setDocNumber(String docNumber) {
         this.docNumber = docNumber;
     }
 
@@ -172,6 +171,7 @@ public class User implements Serializable{
         this.country = country;
     }
 
+    @JsonProperty(value = "isIdentified")
     public boolean isIdentified() {
         return isIdentified;
     }

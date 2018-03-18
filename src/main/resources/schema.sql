@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS users (
 	last_name VARCHAR(50),
 	middle_name VARCHAR(50),
 	position VARCHAR(50),
-	phone BIGINT,
+	phone VARCHAR(100),
   doc_code INTEGER NOT NULL,
 	doc_number BIGINT NOT NULL,
 	doc_date DATE NOT NULL,

@@ -17,6 +17,7 @@ import ru.bellintegrator.practice.Utils.CustomErrorResponse;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.AccountException;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.OfficeException;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.OrganisationException;
+import ru.bellintegrator.practice.exceptionhandler.exceptions.UserException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class PracticeExceptionsHandler extends ResponseEntityExceptionHandler {
      * @param e исключение
      * @return объект-обертку с сообщением об ошибке
      */
-    @ExceptionHandler({AccountException.class, OrganisationException.class, OfficeException.class})
+    @ExceptionHandler({AccountException.class, OrganisationException.class, OfficeException.class, UserException.class})
     protected @ResponseBody ResponseEntity<?> handleAllCustomExceptions(RuntimeException e) {
         log.error(e.getMessage(), e.getCause());
         return new ResponseEntity<>(new CustomErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
