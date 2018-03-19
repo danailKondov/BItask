@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Country implements Serializable{
 
     @Id
-    private int code;
+    private Long code;
 
     @Version
     private Integer version = 0;
@@ -23,16 +23,16 @@ public class Country implements Serializable{
     public Country() {
     }
 
-    public Country(int code, String name) {
+    public Country(Long code, String name) {
         this.code = code;
         this.name = name;
     }
 
-    public int getCode() {
+    public Long getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(Long code) {
         this.code = code;
     }
 

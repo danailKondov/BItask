@@ -13,14 +13,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.bellintegrator.practice.Utils.CustomErrorResponse;
+import ru.bellintegrator.practice.utils.CustomErrorResponse;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.AccountException;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.OfficeException;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.OrganisationException;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.UserException;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created on 08.03.2018.
@@ -42,7 +39,7 @@ public class PracticeExceptionsHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Щбрабатывает исключения ввода/вывода
+     * Обрабатывает исключения ввода/вывода
      * @param e исключение
      * @return объект-обертку с сообщением об ошибке
      */

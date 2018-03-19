@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Document implements Serializable {
 
     @Id
-    private int code;
+    private Long code;
 
     @Version
     private Integer version = 0;
@@ -23,16 +23,16 @@ public class Document implements Serializable {
     public Document() {
     }
 
-    public Document(int code, String docName) {
+    public Document(Long code, String docName) {
         this.code = code;
         this.docName = docName;
     }
 
-    public int getCode() {
+    public Long getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(Long code) {
         this.code = code;
     }
 

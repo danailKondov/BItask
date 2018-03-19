@@ -4,14 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.bellintegrator.practice.Utils.CustomErrorResponse;
-import ru.bellintegrator.practice.Utils.CustomSuccessResponse;
+import ru.bellintegrator.practice.utils.CustomErrorResponse;
+import ru.bellintegrator.practice.utils.CustomSuccessResponse;
 import ru.bellintegrator.practice.registration.controller.AccountController;
 import ru.bellintegrator.practice.registration.model.Account;
 import ru.bellintegrator.practice.registration.service.AccountService;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

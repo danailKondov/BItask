@@ -11,6 +11,7 @@ import java.util.Date;
  */
 public class UserDto {
 
+    private Long officeId;
     private Long id;
     private String firstName;
     private String secondName;
@@ -18,10 +19,11 @@ public class UserDto {
     private String position;
     private String phone;
     private String docName;
+    private Long docCode;
     private String docNumber;
     private Date docDate;
     private String citizenshipName;
-    private int citizenshipCode;
+    private Long citizenshipCode;
     private Boolean isIdentified;
 
     public UserDto() {
@@ -34,12 +36,37 @@ public class UserDto {
         middleName = user.getMiddleName();
         position = user.getPosition();
         phone = user.getPhone();
-        docName = user.getDocument().getDocName();
+        if (user.getDocument() != null) {
+            docName = user.getDocument().getDocName();
+        } else {
+            docName = null;
+        }
         docNumber = user.getDocNumber();
         docDate = user.getDocDate();
-        citizenshipName = user.getCountry().getName();
-        citizenshipCode = user.getCountry().getCode();
+        if (user.getCountry() != null) {
+            citizenshipName = user.getCountry().getName();
+            citizenshipCode = user.getCountry().getCode();
+        } else {
+            citizenshipName = null;
+            citizenshipCode = null;
+        }
         isIdentified = user.isIdentified();
+    }
+
+    public Long getDocCode() {
+        return docCode;
+    }
+
+    public void setDocCode(Long docCode) {
+        this.docCode = docCode;
+    }
+
+    public Long getOfficeId() {
+        return officeId;
+    }
+
+    public void setOfficeId(Long officeId) {
+        this.officeId = officeId;
     }
 
     public Long getId() {
@@ -122,11 +149,11 @@ public class UserDto {
         this.citizenshipName = citizenshipName;
     }
 
-    public int getCitizenshipCode() {
+    public Long getCitizenshipCode() {
         return citizenshipCode;
     }
 
-    public void setCitizenshipCode(int citizenshipCode) {
+    public void setCitizenshipCode(Long citizenshipCode) {
         this.citizenshipCode = citizenshipCode;
     }
 
@@ -137,5 +164,56 @@ public class UserDto {
 
     public void setIdentified(Boolean identified) {
         isIdentified = identified;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserDto userDto = (UserDto) o;
+
+        if (getOfficeId() != null ? !getOfficeId().equals(userDto.getOfficeId()) : userDto.getOfficeId() != null)
+            return false;
+        if (getFirstName() != null ? !getFirstName().equals(userDto.getFirstName()) : userDto.getFirstName() != null)
+            return false;
+        if (getSecondName() != null ? !getSecondName().equals(userDto.getSecondName()) : userDto.getSecondName() != null)
+            return false;
+        if (getMiddleName() != null ? !getMiddleName().equals(userDto.getMiddleName()) : userDto.getMiddleName() != null)
+            return false;
+        if (getPosition() != null ? !getPosition().equals(userDto.getPosition()) : userDto.getPosition() != null)
+            return false;
+        if (getPhone() != null ? !getPhone().equals(userDto.getPhone()) : userDto.getPhone() != null) return false;
+        if (getDocName() != null ? !getDocName().equals(userDto.getDocName()) : userDto.getDocName() != null)
+            return false;
+        if (getDocCode() != null ? !getDocCode().equals(userDto.getDocCode()) : userDto.getDocCode() != null)
+            return false;
+        if (getDocNumber() != null ? !getDocNumber().equals(userDto.getDocNumber()) : userDto.getDocNumber() != null)
+            return false;
+        if (getDocDate() != null ? !getDocDate().equals(userDto.getDocDate()) : userDto.getDocDate() != null)
+            return false;
+        if (getCitizenshipName() != null ? !getCitizenshipName().equals(userDto.getCitizenshipName()) : userDto.getCitizenshipName() != null)
+            return false;
+        if (getCitizenshipCode() != null ? !getCitizenshipCode().equals(userDto.getCitizenshipCode()) : userDto.getCitizenshipCode() != null)
+            return false;
+        return isIdentified != null ? isIdentified.equals(userDto.isIdentified) : userDto.isIdentified == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getOfficeId() != null ? getOfficeId().hashCode() : 0;
+        result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
+        result = 31 * result + (getSecondName() != null ? getSecondName().hashCode() : 0);
+        result = 31 * result + (getMiddleName() != null ? getMiddleName().hashCode() : 0);
+        result = 31 * result + (getPosition() != null ? getPosition().hashCode() : 0);
+        result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
+        result = 31 * result + (getDocName() != null ? getDocName().hashCode() : 0);
+        result = 31 * result + (getDocCode() != null ? getDocCode().hashCode() : 0);
+        result = 31 * result + (getDocNumber() != null ? getDocNumber().hashCode() : 0);
+        result = 31 * result + (getDocDate() != null ? getDocDate().hashCode() : 0);
+        result = 31 * result + (getCitizenshipName() != null ? getCitizenshipName().hashCode() : 0);
+        result = 31 * result + (getCitizenshipCode() != null ? getCitizenshipCode().hashCode() : 0);
+        result = 31 * result + (isIdentified != null ? isIdentified.hashCode() : 0);
+        return result;
     }
 }

@@ -9,6 +9,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.OfficeException;
 import ru.bellintegrator.practice.office.dao.OfficeRepository;
 import ru.bellintegrator.practice.office.model.Office;
+import ru.bellintegrator.practice.office.view.OfficeDto;
 import ru.bellintegrator.practice.orgs.dao.OrganisationRepository;
 import ru.bellintegrator.practice.orgs.model.Organisation;
 
@@ -69,7 +70,7 @@ public class OfficeServiceImplTest {
 
     @Test
     public void deleteOfficeWhenSuccessfulTest() {
-        Office office = new Office();
+        OfficeDto office = new OfficeDto();
         long id = 1L;
         office.setId(id);
 
@@ -80,7 +81,7 @@ public class OfficeServiceImplTest {
 
     @Test(expected = OfficeException.class)
     public void deleteOfficeWhenFailTest() {
-        Office office = new Office();
+        OfficeDto office = new OfficeDto();
         service.deleteOffice(office);
     }
 

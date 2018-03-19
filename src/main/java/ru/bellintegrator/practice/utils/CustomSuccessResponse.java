@@ -1,4 +1,4 @@
-package ru.bellintegrator.practice.Utils;
+package ru.bellintegrator.practice.utils;
 
 import java.util.HashMap;
 import java.util.Map;

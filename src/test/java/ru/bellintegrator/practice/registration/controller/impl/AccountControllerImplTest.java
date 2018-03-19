@@ -4,11 +4,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
-import ru.bellintegrator.practice.Utils.CustomErrorResponse;
-import ru.bellintegrator.practice.Utils.CustomSuccessResponse;
+import ru.bellintegrator.practice.utils.CustomErrorResponse;
+import ru.bellintegrator.practice.utils.CustomSuccessResponse;
 import ru.bellintegrator.practice.registration.model.Account;
 import ru.bellintegrator.practice.registration.service.AccountService;
 

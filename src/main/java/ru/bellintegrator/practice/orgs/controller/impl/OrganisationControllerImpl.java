@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.bellintegrator.practice.Utils.CustomDataOut;
-import ru.bellintegrator.practice.Utils.CustomSuccessResponse;
+import ru.bellintegrator.practice.utils.CustomDataOut;
+import ru.bellintegrator.practice.utils.CustomSuccessResponse;
 import ru.bellintegrator.practice.orgs.controller.OrganisationController;
 import ru.bellintegrator.practice.orgs.model.Organisation;
 import ru.bellintegrator.practice.orgs.service.OrganisationService;
@@ -15,9 +15,6 @@ import ru.bellintegrator.practice.orgs.view.OrgDTO;
 import javax.validation.Valid;
 
 import java.util.List;
-import java.util.Map;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
  * Created on 11.03.2018.

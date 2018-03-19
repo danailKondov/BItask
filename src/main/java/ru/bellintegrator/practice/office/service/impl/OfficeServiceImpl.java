@@ -70,7 +70,7 @@ public class OfficeServiceImpl implements OfficeService {
     }
 
     @Override
-    public void deleteOffice(Office office) {
+    public void deleteOffice(OfficeDto office) {
         if(office.getId() == null) throw new OfficeException("Невозможно удалить офис, поскольку не был передан параметр ID");
         officeRepository.delete(office.getId());
     }

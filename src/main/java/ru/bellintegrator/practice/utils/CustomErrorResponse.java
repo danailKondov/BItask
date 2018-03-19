@@ -1,4 +1,4 @@
-package ru.bellintegrator.practice.Utils;
+package ru.bellintegrator.practice.utils;
 
 /**
  * Created on 11.03.2018.
