@@ -19,6 +19,7 @@ import ru.bellintegrator.practice.users.model.User;
 import ru.bellintegrator.practice.users.service.UserService;
 import ru.bellintegrator.practice.users.view.UserDto;
 import ru.bellintegrator.practice.users.view.UserListDto;
+import ru.bellintegrator.practice.users.view.UserSaveDto;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -127,7 +128,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(UserDto user) {
+    public void saveUser(UserSaveDto user) {
         if (user.getOfficeId() == null) throw new UserException("Невозможно сохранить служащего без ID его офиса");
         Office office = officeRepository.findOne(user.getOfficeId());
         if (office == null) throw new UserException("Невозможно сохранить служащего - " +
@@ -139,7 +140,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserListDto> getAllUsersByCriterias(UserDto user) {
+    public List<UserListDto> getAllUsersByCriterias(UserSaveDto user) {
         Specification<User> spec = new Specification<User>() {
             @Override
             public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {

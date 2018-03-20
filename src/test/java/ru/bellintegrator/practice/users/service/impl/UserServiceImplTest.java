@@ -8,11 +8,13 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.UserException;
 import ru.bellintegrator.practice.office.dao.OfficeRepository;
+import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.referencebook.dao.CountryRepository;
 import ru.bellintegrator.practice.referencebook.dao.DocumentRepository;
 import ru.bellintegrator.practice.users.dao.UserRepository;
 import ru.bellintegrator.practice.users.model.User;
 import ru.bellintegrator.practice.users.view.UserDto;
+import ru.bellintegrator.practice.users.view.UserSaveDto;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -57,17 +59,45 @@ public class UserServiceImplTest {
         userService.getUserById(1L);
     }
 
-    // NPE - проверить
-    @Test
-    public void updateUserWhenSuccessfulTest() {
+    @Test(expected = UserException.class)
+    public void updateUserWhenFailTest() {
         UserDto userDto = new UserDto();
         userDto.setId(1L);
         userDto.setFirstName("Name");
-        User user = new User();
-        when(userRepository.findOne(1L)).thenReturn(user);
+
+        when(userRepository.findOne(1L)).thenReturn(null);
 
         userService.updateUser(userDto);
+    }
 
-        assertTrue("Name".equals(user.getFirstName()));
+    @Test
+    public void deleteUserWhenSuccessfulTest() {
+        UserDto userDto = new UserDto();
+        userDto.setId(1L);
+        userDto.setFirstName("Name");
+
+        userService.deleteUser(userDto);
+
+        verify(userRepository).delete(1L);
+    }
+
+    @Test(expected = UserException.class)
+    public void deleteUserWhenFailTest() {
+        UserDto userDto = new UserDto();
+        userService.deleteUser(userDto);
+    }
+
+    @Test(expected = UserException.class)
+    public void saveUserWhenFailTest() {
+        UserSaveDto userDto = new UserSaveDto();
+        userDto.setId(1L);
+        userDto.setFirstName("Name");
+        Office office = new Office();
+        office.setId(1L);
+        userDto.setOfficeId(1L);
+
+        when(officeRepository.findOne(1L)).thenReturn(null);
+
+        userService.saveUser(userDto);
     }
 }

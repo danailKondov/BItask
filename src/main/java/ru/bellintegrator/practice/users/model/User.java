@@ -179,4 +179,32 @@ public class User implements Serializable{
     public void setIdentified(boolean identified) {
         isIdentified = identified;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (getFirstName() != null ? !getFirstName().equals(user.getFirstName()) : user.getFirstName() != null)
+            return false;
+        if (getLastName() != null ? !getLastName().equals(user.getLastName()) : user.getLastName() != null)
+            return false;
+        if (getMiddleName() != null ? !getMiddleName().equals(user.getMiddleName()) : user.getMiddleName() != null)
+            return false;
+        if (getPosition() != null ? !getPosition().equals(user.getPosition()) : user.getPosition() != null)
+            return false;
+        return getPhone() != null ? getPhone().equals(user.getPhone()) : user.getPhone() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getFirstName() != null ? getFirstName().hashCode() : 0;
+        result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
+        result = 31 * result + (getMiddleName() != null ? getMiddleName().hashCode() : 0);
+        result = 31 * result + (getPosition() != null ? getPosition().hashCode() : 0);
+        result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
+        return result;
+    }
 }

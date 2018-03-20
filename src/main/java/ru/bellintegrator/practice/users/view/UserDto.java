@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class UserDto {
 
-    private Long officeId;
+//    private Long officeId;
     private Long id;
     private String firstName;
     private String secondName;
@@ -38,6 +38,7 @@ public class UserDto {
         phone = user.getPhone();
         if (user.getDocument() != null) {
             docName = user.getDocument().getDocName();
+            docCode = user.getDocument().getCode();
         } else {
             docName = null;
         }
@@ -59,14 +60,6 @@ public class UserDto {
 
     public void setDocCode(Long docCode) {
         this.docCode = docCode;
-    }
-
-    public Long getOfficeId() {
-        return officeId;
-    }
-
-    public void setOfficeId(Long officeId) {
-        this.officeId = officeId;
     }
 
     public Long getId() {
@@ -173,8 +166,6 @@ public class UserDto {
 
         UserDto userDto = (UserDto) o;
 
-        if (getOfficeId() != null ? !getOfficeId().equals(userDto.getOfficeId()) : userDto.getOfficeId() != null)
-            return false;
         if (getFirstName() != null ? !getFirstName().equals(userDto.getFirstName()) : userDto.getFirstName() != null)
             return false;
         if (getSecondName() != null ? !getSecondName().equals(userDto.getSecondName()) : userDto.getSecondName() != null)
@@ -184,35 +175,16 @@ public class UserDto {
         if (getPosition() != null ? !getPosition().equals(userDto.getPosition()) : userDto.getPosition() != null)
             return false;
         if (getPhone() != null ? !getPhone().equals(userDto.getPhone()) : userDto.getPhone() != null) return false;
-        if (getDocName() != null ? !getDocName().equals(userDto.getDocName()) : userDto.getDocName() != null)
-            return false;
-        if (getDocCode() != null ? !getDocCode().equals(userDto.getDocCode()) : userDto.getDocCode() != null)
-            return false;
-        if (getDocNumber() != null ? !getDocNumber().equals(userDto.getDocNumber()) : userDto.getDocNumber() != null)
-            return false;
-        if (getDocDate() != null ? !getDocDate().equals(userDto.getDocDate()) : userDto.getDocDate() != null)
-            return false;
-        if (getCitizenshipName() != null ? !getCitizenshipName().equals(userDto.getCitizenshipName()) : userDto.getCitizenshipName() != null)
-            return false;
-        if (getCitizenshipCode() != null ? !getCitizenshipCode().equals(userDto.getCitizenshipCode()) : userDto.getCitizenshipCode() != null)
-            return false;
         return isIdentified != null ? isIdentified.equals(userDto.isIdentified) : userDto.isIdentified == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getOfficeId() != null ? getOfficeId().hashCode() : 0;
-        result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
+        int result = getFirstName() != null ? getFirstName().hashCode() : 0;
         result = 31 * result + (getSecondName() != null ? getSecondName().hashCode() : 0);
         result = 31 * result + (getMiddleName() != null ? getMiddleName().hashCode() : 0);
         result = 31 * result + (getPosition() != null ? getPosition().hashCode() : 0);
         result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
-        result = 31 * result + (getDocName() != null ? getDocName().hashCode() : 0);
-        result = 31 * result + (getDocCode() != null ? getDocCode().hashCode() : 0);
-        result = 31 * result + (getDocNumber() != null ? getDocNumber().hashCode() : 0);
-        result = 31 * result + (getDocDate() != null ? getDocDate().hashCode() : 0);
-        result = 31 * result + (getCitizenshipName() != null ? getCitizenshipName().hashCode() : 0);
-        result = 31 * result + (getCitizenshipCode() != null ? getCitizenshipCode().hashCode() : 0);
         result = 31 * result + (isIdentified != null ? isIdentified.hashCode() : 0);
         return result;
     }
