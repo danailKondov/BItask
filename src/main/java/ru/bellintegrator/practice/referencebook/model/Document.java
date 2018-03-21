@@ -1,5 +1,7 @@
 package ru.bellintegrator.practice.referencebook.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -13,6 +15,7 @@ public class Document implements Serializable {
     @Id
     private Long code;
 
+    @JsonIgnore
     @Version
     private Integer version = 0;
 

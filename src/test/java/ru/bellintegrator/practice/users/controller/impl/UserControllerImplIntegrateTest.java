@@ -16,8 +16,10 @@ import ru.bellintegrator.practice.users.dao.UserRepository;
 import ru.bellintegrator.practice.users.model.User;
 import ru.bellintegrator.practice.users.view.UserDto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -357,9 +359,189 @@ public class UserControllerImplIntegrateTest {
         String result = response.getBody();
         String expected = "{\"error\":\"Невозможно сохранить служащего без ID его офиса\"}";
         assertThat(result, is(expected));
-//        System.out.println(result);
     }
 
     @Test
-    public void getAllUsersByCriteriasTest() {}
+    public void getAllUsersByCriteriasWhenOneFilterTest() {
+        List<Long> listId = addFourUsersToDB();
+
+        String body = "{\"officeId\" : 1}";
+
+        HttpEntity entity = new HttpEntity<>(body, headers);
+        String url = "/api/user/list";
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+        String result = response.getBody();
+        String expected = "{\"data\":" +
+                "[{\"id\":" + listId.get(0) + "," +
+                "\"firstName\":\"firstName1\"," +
+                "\"secondName\":\"lastName1\"," +
+                "\"middleName\":\"middleName1\"," +
+                "\"position\":\"position1\"}," +
+                "{\"id\":" + listId.get(1) + "," +
+                "\"firstName\":\"firstName2\"," +
+                "\"secondName\":\"lastName2\"," +
+                "\"middleName\":\"middleName2\"," +
+                "\"position\":\"position2\"}]}";
+        assertThat(result, is(expected));
+    }
+
+    private List<Long> addFourUsersToDB() {
+        List<Long> listId = new ArrayList<>();
+        Office office = new Office();
+        office.setId(1L);
+        Document document = new Document();
+        document.setCode(21L);
+        Country country = new Country();
+        country.setCode(643L);
+        User user = new User(office,
+                "firstName1",
+                "lastName1",
+                "middleName1",
+                "position1",
+                "123456789",
+                document,
+                "568741",
+                new Date(1521545817741L), // 2018-03-20
+                country,
+                true);
+        userRepository.save(user);
+        listId.add(getIdFromUserInDB(user));
+
+        User user2 = new User(office,
+                "firstName2",
+                "lastName2",
+                "middleName2",
+                "position2",
+                "432156789",
+                document,
+                "895741",
+                new Date(1521545817741L), // 2018-03-20
+                country,
+                false);
+        userRepository.save(user2);
+        listId.add(getIdFromUserInDB(user2));
+
+        Office office2 = new Office();
+        office2.setId(2L);
+        Document document2 = new Document();
+        document2.setCode(10L);
+        Country country2 = new Country();
+        country2.setCode(612L);
+        User user3 = new User(office2,
+                "firstName3",
+                "lastName3",
+                "middleName3",
+                "position3",
+                "654756789",
+                document2,
+                "56875641",
+                new Date(1521545817741L), // 2018-03-20
+                country2,
+                true);
+        userRepository.save(user3);
+        listId.add(getIdFromUserInDB(user3));
+
+        Country country3 = new Country();
+        country3.setCode(585L);
+        User user4 = new User(office2,
+                "firstName4",
+                "lastName4",
+                "middleName4",
+                "position4",
+                "66546789",
+                document2,
+                "45895641",
+                new Date(1521545817741L), // 2018-03-20
+                country3,
+                false);
+        userRepository.save(user4);
+        listId.add(getIdFromUserInDB(user4));
+        return listId;
+    }
+
+    @Test
+    public void getAllUsersByCriteriasWhenTwoFilterTest() {
+        List<Long> listId = addFourUsersToDB();
+
+        String body = "{\"docCode\" : 10," +
+                "  \"citizenshipCode\" : 585" +
+                "}";
+
+        HttpEntity entity = new HttpEntity<>(body, headers);
+        String url = "/api/user/list";
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+        String result = response.getBody();
+        String expected = "{\"data\":" +
+                "[{\"id\":" + listId.get(3) + "," +
+                "\"firstName\":\"firstName4\"," +
+                "\"secondName\":\"lastName4\"," +
+                "\"middleName\":\"middleName4\"," +
+                "\"position\":\"position4\"}]}";
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    public void getAllUsersByCriteriasWhenThreeFilterTest() {
+        List<Long> listId = addFourUsersToDB();
+
+        String body = "{" +
+                "  \"firstName\" : \"firstName1\"," +
+                "  \"secondName\" : \"lastName1\"," +
+                "  \"middleName\": \"middleName1\"" +
+                "}";
+
+        HttpEntity entity = new HttpEntity<>(body, headers);
+        String url = "/api/user/list";
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+        String result = response.getBody();
+        String expected = "{\"data\":" +
+                "[{\"id\":" + listId.get(0) + "," +
+                "\"firstName\":\"firstName1\"," +
+                "\"secondName\":\"lastName1\"," +
+                "\"middleName\":\"middleName1\"," +
+                "\"position\":\"position1\"}]}";
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    public void getAllUsersByCriteriasWhenNoFilterTest() {
+        List<Long> listId = addFourUsersToDB();
+
+        String body = "{}";
+
+        HttpEntity entity = new HttpEntity<>(body, headers);
+        String url = "/api/user/list";
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+        String result = response.getBody();
+        String expected = "{\"data\":" +
+                "[{\"id\":" + listId.get(0) + "," +
+                "\"firstName\":\"firstName1\"," +
+                "\"secondName\":\"lastName1\"," +
+                "\"middleName\":\"middleName1\"," +
+                "\"position\":\"position1\"}," +
+                "{\"id\":" + listId.get(1) + "," +
+                "\"firstName\":\"firstName2\"," +
+                "\"secondName\":\"lastName2\"," +
+                "\"middleName\":\"middleName2\"," +
+                "\"position\":\"position2\"}," +
+                "{\"id\":" + listId.get(2) + "," +
+                "\"firstName\":\"firstName3\"," +
+                "\"secondName\":\"lastName3\"," +
+                "\"middleName\":\"middleName3\"," +
+                "\"position\":\"position3\"}," +
+                "{\"id\":" + listId.get(3) + "," +
+                "\"firstName\":\"firstName4\"," +
+                "\"secondName\":\"lastName4\"," +
+                "\"middleName\":\"middleName4\"," +
+                "\"position\":\"position4\"}]}";
+        assertThat(result, is(expected));
+    }
 }
