@@ -1,16 +1,20 @@
 package ru.bellintegrator.practice.registration.service.impl;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.bellintegrator.practice.registration.dao.AccountDAO;
 import ru.bellintegrator.practice.exceptionhandler.exceptions.AccountException;
 import ru.bellintegrator.practice.registration.model.Account;
+import ru.bellintegrator.practice.registration.service.ComputeHashService;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 /**
  * Created on 09.03.2018.
@@ -21,6 +25,9 @@ public class AccountServiceImplTest {
     @Mock
     private AccountDAO accountDAO;
 
+    @Mock
+    private ComputeHashService hashService;
+
     @InjectMocks
     private AccountServiceImpl accountService;
 
@@ -29,17 +36,17 @@ public class AccountServiceImplTest {
      */
     @Test
     public void addWhenIsOkTest() {
-        Account account = new Account("name", "log", "pass");
-        Mockito.when(accountDAO.getAccountByLogin(account.getLogin())).thenReturn(null); // в базе нет аккаунта с таким логином
-        Mockito.when(accountDAO.save(account)).thenReturn(true);
+        Account account = new Account("name", "log@mail.com", "pass");
+        when(accountDAO.getAccountByLogin(account.getLogin())).thenReturn(null); // в базе нет аккаунта с таким логином
+        when(accountDAO.save(account)).thenReturn(true);
+        when(hashService.getSHA256HashFromString("pass")).thenReturn("10/w7o2juYBrGMh32/KbveULW9jk2tejpyUAD+uC6PE=");
 
         boolean result = accountService.add(account);
 
-        Mockito.verify(accountDAO).save(account);
-        Mockito.verify(accountDAO).getAccountByLogin(account.getLogin());
+        verify(accountDAO).save(account);
+        verify(accountDAO).getAccountByLogin(account.getLogin());
         assertTrue(result);
         assertTrue(account.getPassword().equals("10/w7o2juYBrGMh32/KbveULW9jk2tejpyUAD+uC6PE=")); // вычисление хэш-кода пароля было успешно
-        assertTrue(account.getActivationCode() != null); // получили код активации
     }
 
     /**
@@ -47,9 +54,9 @@ public class AccountServiceImplTest {
      */
     @Test(expected = AccountException.class)
     public void addWhenLoginIsAlreadyInUseTest() {
-        Account accountToAdd = new Account("some name", "log", "some pass");
-        Account accountInDB = new Account("name", "log", "pass");
-        Mockito.when(accountDAO
+        Account accountToAdd = new Account("some name", "log@mail.com", "some pass");
+        Account accountInDB = new Account("name", "log@mail.com", "pass");
+        when(accountDAO
                 .getAccountByLogin(accountToAdd.getLogin()))
                 .thenReturn(accountInDB); // в базе есть акк с таким логином
         accountService.add(accountToAdd);
@@ -62,10 +69,11 @@ public class AccountServiceImplTest {
     public void verifyLoginWhenIsOkTest() {
         Account account = new Account(
                 "name",
-                "log",
+                "log@mail.com",
                 "10/w7o2juYBrGMh32/KbveULW9jk2tejpyUAD+uC6PE="); // password is hash from "pass"
-        Mockito.when(accountDAO.getAccountByLogin(account.getLogin())).thenReturn(account);
-        assertTrue(accountService.verifyLogin("log", "pass"));
+        when(accountDAO.getAccountByLogin(account.getLogin())).thenReturn(account);
+        when(hashService.getSHA256HashFromString("pass")).thenReturn("10/w7o2juYBrGMh32/KbveULW9jk2tejpyUAD+uC6PE=");
+        assertTrue(accountService.verifyLogin("log@mail.com", "pass"));
     }
 
     /**
@@ -75,10 +83,11 @@ public class AccountServiceImplTest {
     public void verifyLoginWhenPassIsWrongTest() {
         Account account = new Account(
                 "name",
-                "log",
+                "log@mail.com",
                 "10/w7o2juYBrGMh32/KbveULW9jk2tejpyUAD+uC6PE="); // password is hash from "pass"
-        Mockito.when(accountDAO.getAccountByLogin(account.getLogin())).thenReturn(account);
-        assertFalse(accountService.verifyLogin("log", "wrong pass"));
+        when(accountDAO.getAccountByLogin(account.getLogin())).thenReturn(account);
+        when(hashService.getSHA256HashFromString("wrong pass")).thenReturn("11/w7o2juYBrGMh32/KbveULW9jk2tejpyUAD+uC6PE=");
+        assertFalse(accountService.verifyLogin("log@mail.com", "wrong pass"));
     }
 
     /**
@@ -86,8 +95,9 @@ public class AccountServiceImplTest {
      */
     @Test(expected = AccountException.class)
     public void verifyLoginWhenNoAccWithSuchLoginTest() {
-        Mockito.when(accountDAO.getAccountByLogin("no acc login")).thenReturn(null);
-        accountService.verifyLogin("no acc login", "pass");
+        when(accountDAO.getAccountByLogin("no_acc_login@mail.com")).thenReturn(null);
+        when(hashService.getSHA256HashFromString("pass")).thenReturn("10/w7o2juYBrGMh32/KbveULW9jk2tejpyUAD+uC6PE=");
+        accountService.verifyLogin("no_acc_login@mail.com", "pass");
     }
 
     /**
@@ -95,7 +105,7 @@ public class AccountServiceImplTest {
      */
     @Test(expected = AccountException.class)
     public void verifyLoginWhenLoginIsNullTest() {
-        Mockito.when(accountDAO.getAccountByLogin("no acc login")).thenReturn(null);
+        when(accountDAO.getAccountByLogin("no_acc_login@mail.com")).thenReturn(null);
         accountService.verifyLogin(null, "pass");
     }
 
@@ -104,7 +114,7 @@ public class AccountServiceImplTest {
      */
     @Test(expected = AccountException.class)
     public void verifyLoginWhenPassIsNullTest() {
-        Mockito.when(accountDAO.getAccountByLogin("no acc login")).thenReturn(null);
+        when(accountDAO.getAccountByLogin("no_acc_login@mail.com")).thenReturn(null);
         accountService.verifyLogin("login", null);
     }
 
@@ -113,16 +123,18 @@ public class AccountServiceImplTest {
      */
     @Test
     public void activateAccountByCodeWhenSuccessfulTest() {
-        Account account = new Account("name", "log", "pass");
+        Account account = new Account("name", "log@mail.com", "pass");
         account.setActivationCode("KKpcU4HhmcMLDoBFU835whfqSY3TsFIEtxMxq2MPv94="); // = "0ZW25XEH5705317LNCN5KNCKOVRYDRX9PRATDK7BLZUFRQRBRE" to hash
-        Mockito.when(accountDAO
+        when(accountDAO
                 .getAccountByCode("KKpcU4HhmcMLDoBFU835whfqSY3TsFIEtxMxq2MPv94="))
                 .thenReturn(account);
+        when(hashService.getSHA256HashFromString("0ZW25XEH5705317LNCN5KNCKOVRYDRX9PRATDK7BLZUFRQRBRE")).
+                thenReturn("KKpcU4HhmcMLDoBFU835whfqSY3TsFIEtxMxq2MPv94=");
 
         accountService.activateAccountByCode("0ZW25XEH5705317LNCN5KNCKOVRYDRX9PRATDK7BLZUFRQRBRE"); // to hash = "KKpcU4HhmcMLDoBFU835whfqSY3TsFIEtxMxq2MPv94="
 
         assertTrue(account.isActivated());
-        Mockito.verify(accountDAO).update(account);
+        verify(accountDAO).update(account);
     }
 
     /**
@@ -130,9 +142,12 @@ public class AccountServiceImplTest {
      */
     @Test(expected = AccountException.class)
     public void activateAccountByCodeWhenCodeIsWrongTest() {
-        Mockito.when(accountDAO
+        when(accountDAO
                 .getAccountByCode("KKpcU4HhmcMLDoBFU835whfqSY3TsFIEtxMxq2MPv94="))
                 .thenReturn(null);
+        when(hashService.getSHA256HashFromString("0ZW25XEH5705317LNCN5KNCKOVRYDRX9PRATDK7BLZUFRQRBRE")).
+                thenReturn("KKpcU4HhmcMLDoBFU835whfqSY3TsFIEtxMxq2MPv94=");
+
         accountService.activateAccountByCode("0ZW25XEH5705317LNCN5KNCKOVRYDRX9PRATDK7BLZUFRQRBRE");
     }
 

@@ -1,12 +1,12 @@
-/*
-DROP TABLE logins;
-DROP TABLE documents;
-DROP TABLE countries;
-DROP TABLE users;
-DROP TABLE addresses;
-DROP TABLE organisations;
-DROP TABLE offices;
-*/
+
+DROP TABLE IF EXISTS logins;
+DROP TABLE IF EXISTS documents;
+DROP TABLE IF EXISTS countries;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS addresses;
+DROP TABLE IF EXISTS organisations;
+DROP TABLE IF EXISTS offices;
+
 
 
 CREATE TABLE IF NOT EXISTS documents (

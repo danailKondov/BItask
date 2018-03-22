@@ -1,5 +1,7 @@
 package ru.bellintegrator.practice.registration.controller.impl;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,10 @@ public class AccountControllerImpl implements AccountController{
     }
 
     @Override
+    @ApiOperation(httpMethod = "POST",
+            value = "Регистрирует новый аккаунт, приходящий в теле запроса",
+            notes = "Логин должен быть email'ом. В случае успешной регистрации возвращает JSON объект {\"result\" : \"success\"}",
+            produces = "application/json")
     @PostMapping(value = "/register")
     public ResponseEntity<?> register(@RequestBody @Valid Account account) {
         accountService.add(account);
