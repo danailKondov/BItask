@@ -51,8 +51,8 @@ public class Application {
 
     @Bean
     public Docket postApi() {
-        return new Docket(DocumentationType.SWAGGER_2).groupName("persons").apiInfo(apiInfo()).
-                select().paths(regex("/person.*")).build(); //"/api"?
+        return new Docket(DocumentationType.SWAGGER_2).groupName("users").apiInfo(apiInfo()).
+                select().paths(regex("/api/user.*")).build();
     }
 
     private ApiInfo apiInfo() {

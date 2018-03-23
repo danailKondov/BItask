@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import ru.bellintegrator.practice.users.model.User;
 
 /**
- * Created жук on 18.03.2018.
+ * Created on 18.03.2018.
  */
 public interface UserRepository extends CrudRepository<User, Long>, JpaSpecificationExecutor<User> {
 }
